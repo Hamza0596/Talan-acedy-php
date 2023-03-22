@@ -1,0 +1,115 @@
+.card {
+  padding: 2em;
+  font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica,
+    Arial, sans-serif, “Apple Color Emoji”, “Segoe UI Emoji”, “Segoe UI Symbol”;
+  tr {
+    width: 12px !important;
+    font-size: 14px !important;
+  }
+
+  th {
+    font-size: 14px !important;
+  }
+  // .modal {
+  //   text-align: center;
+  //   width: 250px;
+  //   height: 500px;
+  // }
+  .pi {
+    font-size: 15px;
+  }
+
+  input {
+    height: 35px;
+  }
+  .concat {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+  .pi-heart {
+    width: 20px;
+    height: 20px;
+    border: none;
+    background-color: unset;
+    padding-top: 5px;
+    padding-left: 1px;
+  }
+  .pi-chevron-circle-right {
+    width: 23px;
+    height: 25px;
+    border: none;
+    background-color: unset;
+  }
+  button:active {
+    color: blue;
+  }
+}
+.inputSpace {
+  margin-bottom: 8vh;
+}
+
+:host ::ng-deep .p-paginator .p-paginator-current {
+  font-size: small;
+}
+:host ::ng-deep .p-link {
+  font-size: 0.8rem;
+}
+:host ::ng-deep .p-button-outlined {
+  background-color: green;
+}
+
+:host ::ng-deep .p-element .p-dropdown-label .p-inputtext {
+  color: red;
+}
+
+::ng-deep .p-column-filter-buttonbar {
+  min-width: 240px;
+}
+
+label span {
+  color: red;
+}
+
+.multiselect-width {
+  width: 300px;
+}
+
+::ng-deep .p-paginator .p-inputtext {
+  font-size: 0.8rem;
+}
+
+.plus-position {
+  color: #006dbf;
+
+  cursor: pointer;
+  position: absolute;
+  right: 80px;
+  top: 22px;
+}
+
+.role-option {
+  font-size: 13.8px;
+}
+
+@media screen and (max-width: 500px) {
+  .plus-position {
+    font-size: 1em;
+    position: absolute;
+    right: 0px;
+    top: 22px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  input {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 290px) {
+  input {
+    width: 120px;
+  }
+}

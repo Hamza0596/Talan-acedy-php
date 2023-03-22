@@ -1,0 +1,35 @@
+monolog:
+    channels: ['crossCorrection','jokersRetrait']
+    handlers:
+        cron_correction_logging:
+            type: stream
+            path: "%kernel.logs_dir%/crossCorrection.%kernel.environment%.log"
+            level: debug
+            channels: ["crossCorrection"]
+        cron_joker_logging:
+            type: stream
+            path: "%kernel.logs_dir%/jokersRetrait.%kernel.environment%.log"
+            level: debug
+            channels: ["jokersRetrait"]
+        cron_status_logging:
+            type: stream
+            path: "%kernel.logs_dir%/changeStatus.%kernel.environment%.log"
+            level: debug
+            channels: ["changeStatus"]
+        main:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+            channels: ["!event"]
+        # uncomment to get logging in your browser
+        # you may have to allow bigger header sizes in your Web server configuration
+        #firephp:
+        #    type: firephp
+        #    level: info
+        #chromephp:
+        #    type: chromephp
+        #    level: info
+        console:
+            type: console
+            process_psr_3_messages: false
+            channels: ["!event", "!doctrine", "!console"]

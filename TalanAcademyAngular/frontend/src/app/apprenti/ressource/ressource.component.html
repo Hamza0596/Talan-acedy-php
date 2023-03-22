@@ -1,0 +1,85 @@
+<div class="card">
+  <h4>Mes Ressources</h4>
+  <p-table
+    #dt2
+    [value]="ressources"
+    dataKey="id"
+    [rows]="5"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5, 10, 25]"
+    [loading]="loading"
+    class="p-datatable-customers"
+    [paginator]="true"
+    currentPageReportTemplate="{first} à {last} de {totalRecords} ressources"
+    [globalFilterFields]="['title', 'lesson', 'comment','dayId']"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            [(ngModel)]="searchText"
+            pInputText
+            type="text"
+            (input)="dt2.filterGlobal(searchText, 'contains')"
+            placeholder="Recherche"
+          />
+        </span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr [style]="{ width: 'auto !important' }">
+        <th scope="col">Lien</th>
+        <th scope="col">Titre</th>
+        <th scope="col">Leçon</th>
+        <th scope="col">Module</th>
+        <th scope="col">Commentaire</th>
+        <th scope="col">Interactions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-ressources>
+      <tr>
+        <td [style]="{ width: '5% !important' }">
+          <button
+            [style]="{ cursor: 'pointer' }"
+            class="pi pi-chevron-circle-right"
+            title="Ressource proposée!"
+            type="button"
+            (click)="getUrl(ressources.url)"
+          ></button>
+        </td>
+        <td [style]="{ width: '25% !important' }">
+          {{ ressources.title }}
+        </td>
+        <td [style]="{ width: '25% !important' }">
+          {{ ressources.lesson }}
+        </td>
+        <td [style]="{ width: '25% !important' }">
+          {{ ressources.module }}
+        </td>
+        <td [style]="{ width: '25% !important' }">
+          {{ ressources.comment }}
+        </td>
+        <td
+          [style]="{
+            'font-size': '17px !important',
+            width: '25% !important',
+            'padding-right': '180px'
+          }"
+        >
+          <div class="concat">
+            {{ ressources.dayId }}
+            <em class="pi pi-heart" [style]="{ color: 'red' }"> </em>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">Pas de ressource trouvée.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

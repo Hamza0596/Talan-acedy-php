@@ -1,0 +1,94 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'fr'
+    email_from: '%env(MAILER_FROM)%'
+    cv_candidate_directory: '%kernel.project_dir%/private/cv_candidate/'
+    cursus_directory: '%kernel.project_dir%/private/file_upload/cursus/'
+    cursus_directory_default: '%kernel.project_dir%/public/file_upload/cursus/placeholder_cursus.jpeg'
+    image_user_directory: '%kernel.project_dir%/private/file_upload/image_user/'
+    image_user_directory_default: '%kernel.project_dir%/public/file_upload/image_user/placeholder_image.jpg'
+    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+    template_activity: '%kernel.project_dir%/templates/dashboard/activity_courses/template_content.html'
+    preparcours_directory: '%kernel.project_dir%/private/preparcours/'
+    preparcours_candidate_directory: '%kernel.project_dir%/private/preparcours_candidate/'
+    excel_directory: '%kernel.project_dir%/private/'
+services:
+    twig.extension.text:
+        class: Twig_Extensions_Extension_Text
+        tags:
+            - { name: twig.extension }
+    twig.extension.sortbyfield:
+        class: Snilius\Twig\SortByFieldExtension
+        tags:
+            - { name: twig.extension }
+    twig.extension.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    App\Service\Mailer:
+        arguments:
+            $mailFrom: '%email_from%'
+
+    App\Service\CvUploadService:
+        arguments:
+            $targetDirectory: '%cv_candidate_directory%'
+
+    App\Service\ImageUserUploadService:
+        arguments:
+            $targetDirectory: '%image_user_directory%'
+
+    App\Service\PreparcoursUpload:
+        arguments:
+            $targetDirectory: '%preparcours_directory%'
+
+    app.cron.service:
+        class: App\Service\CronService
+
+    associate.date.service:
+        class: App\Service\AssociateDateService
+    session.service:
+        class: App\Service\SessionService
+
+    calculate.average.service:
+        class: App\Service\CalculateAverageService
+    App\Service\CronService:
+        arguments: ['@doctrine.orm.default_entity_manager','@associate.date.service','@logger']
+        tags:
+            - { name: monolog.logger, channel: crossCorrection}
+
+    App\Service\JokerSubtractionService:
+        arguments: ['@doctrine.orm.default_entity_manager','@session.service','@calculate.average.service','@associate.date.service','@logger']
+        tags:
+            - { name: monolog.logger, channel: jokersRetrait}
+    App\Service\SessionService:
+        arguments: ['@doctrine.orm.default_entity_manager', '@App\Service\HolidaysService', '@App\Repository\SessionUserDataRepository', '@App\Repository\SessionRepository', '@App\Repository\SessionDayCourseRepository', '@App\Service\AssociateDateService', '@App\Service\AdminStaticService', '@logger']
+        tags:
+            - { name: monolog.logger, channel: changeStatus}
+    fbn_user.login_entry_point:
+        class: App\Security\LoginEntryPoint
+        arguments: [ '@router' ]
+    acme_api.event.authentication_success_listener:
+        class: App\EventListener\AuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }

@@ -1,0 +1,40 @@
+###> symfony/framework-bundle ###
+/.env
+/.env.local
+/.env.local.php
+/.env.*.local
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+/public/uploads/
+/public/js/
+/private/cv_candidate/
+/private/file_upload/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
+/.idea
+/.scannerwork
+/coverage/
+/coverageTest/
+/public/js/fos_js_routes.json
+sonar-project.properties
+
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

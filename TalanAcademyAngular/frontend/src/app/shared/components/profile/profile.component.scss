@@ -1,0 +1,40 @@
+.mx-lg {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.mx-xl {
+    margin-left: 35%;
+    margin-right: 35%;
+}
+
+.mx-md {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+@media only screen
+and (min-width : 768px) {
+    .margin {
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+}
+
+/* Desktops and laptops ----------- */
+@media only screen
+and (min-width : 1224px) {
+    .margin {
+        margin-left: 25%;
+        margin-right: 25%;
+    }
+}
+
+/* Large screens ----------- */
+@media only screen
+and (min-width : 1824px) {
+    .margin {
+        margin-left: 35%;
+        margin-right: 35%;
+    }
+}

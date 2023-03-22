@@ -1,0 +1,53 @@
+<div>
+    <div class="flex">
+        <div class="card" *ngIf="visible==true">
+            <div class="flex flex-row flex-wrap card-container blue-container">
+                <p-card class="flex align-items-center justify-content-center m-2" class="cl1" [style]="{ 'margin-top': '20px', width: '16rem' }">
+
+                    <ng-template pTemplate="header">
+                        <img alt="Card" [src]="cursusImage" />
+                    </ng-template>
+                    <strong>{{ sessionName }}#{{ sessionId }}</strong>
+                    <p>
+                        <strong>{{ NbModules }}</strong> Modules&nbsp;&nbsp;&nbsp;
+                        <span></span><strong>{{ NbCourses }}</strong> Leçons
+                    </p>
+                    <div style="display: flex; align-items: center; justify-content: center; padding-top: 20px;">
+                        <div style="width: 25%;">
+                            <p-button [style]="{'height': '1px'}" icon="pi pi-calendar-plus" (click)="goToProgram()"></p-button>
+                        </div>
+                        <div style="width: 75%;">
+                            <p-progressBar [value]=progression [style]="{'font-size' : '12px'}"></p-progressBar>
+                        </div>
+                    </div>
+                </p-card>
+            </div>
+        </div>
+
+        <div style="width: 60vw; margin: 100px auto; line-height: 45px" *ngIf="visible == false">
+            <h1 style="text-align: center">
+                <p>
+                    {{ message }}
+                </p>
+                <div class="countdown">
+                    <p>
+                        {{ days }} jours : {{ hours }} heures :{{ minutes }} minutes :{{ seconds }} seconds
+                    </p>
+                </div>
+                <img src="assets/logoTA.png" height="40" class="mr-2" alt="talan academy" />
+            </h1>
+        </div>
+        <div style="width: 60vw; margin: 100px auto; line-height: 45px" *ngIf="finishedSession">
+            <h1 style="text-align: center">
+                Félicitation , Vous avez réussi à terminer avec succès votre parcours de Talan Academy.
+                <br /> Vous pouvez avoir accès à vos anciens cours.
+                <br />
+            </h1>
+            <div style="margin-bottom: 50px; text-align: center">
+                <button pButton pRipple type="button" label="Accéder au cour" class="p-button-raised p-button-secondary" [routerLink]="['/apprenti/course']"></button>
+            </div>
+        </div>
+        <app-soumission *ngIf="showValidation$ | async" [dayId]="dayId" [submitted]="submitted" [repoLink]="repoLink"></app-soumission>
+        <app-corrections style="padding-top: 20px" class="col-10" *ngIf="showCorrection$ | async"></app-corrections>
+    </div>
+</div>

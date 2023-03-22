@@ -1,0 +1,68 @@
+<p-fieldset [toggleable]="isToggleable" [collapsed]="true">
+  <p-header [innerHTML]="message"></p-header>
+  <div [hidden]="!showContent">
+    <p-divider align="right">
+      <div class="inline-flex align-items-center">
+        <a
+          href="{{ gitLink }}"
+          style="text-decoration: none; color: inherit"
+          target="_blank"
+          rel="noopener"
+        >
+          <em class="pi pi-github mr-2"></em>
+          <strong>Lien Git</strong>
+        </a>
+      </div>
+    </p-divider>
+    <h4 style="margin-bottom: 15px">
+      List des questions : Répondez par Oui ou Non pour chaque question
+    </h4>
+    <form [formGroup]="formGroup">
+      <div *ngFor="let question of questionList; let i = index">
+        <div class="flex justify-content-between">
+          <div class="col-10">
+            <strong>{{ i + 1 }}.</strong>
+            <span [innerHTML]="question.orderDescription"></span>
+          </div>
+          <div class="row text-left">
+            <div class="field-radiobutton">
+              <p-radioButton
+                formControlName="{{ question.correctionResult }}"
+                [value]="1"
+              >
+              </p-radioButton>
+              <label style="margin-left: 10px; margin-right: 10px">Oui</label>
+              <p-radioButton
+                formControlName="{{ question.correctionResult }}"
+                [value]="0"
+              >
+              </p-radioButton>
+              <label style="margin-left: 10px">Non</label>
+            </div>
+          </div>
+        </div>
+        <p-divider></p-divider>
+      </div>
+      <textarea
+        pInputTextarea
+        formControlName="comment"
+        [rows]="3"
+        [cols]="80"
+        [placeholder]="'Donner votre commentaire'"
+        [autoResize]="true"
+        required
+      ></textarea>
+      <div class="flex flex-row-reverse">
+        <button
+          type="submit"
+          class="p-button-rounded"
+          pRipple
+          pButton
+          label="Soumettre"
+          (click)="onSubmit()"
+          [disabled]="formGroup.invalid"
+        ></button>
+      </div>
+    </form>
+  </div>
+</p-fieldset>

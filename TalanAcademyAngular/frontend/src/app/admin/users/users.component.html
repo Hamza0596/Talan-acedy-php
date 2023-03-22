@@ -1,0 +1,393 @@
+<div class="card">
+  <h4>Liste des utilisateurs</h4>
+
+  <p-table
+    #datatable
+    #dt1
+    [value]="users"
+    dataKey="email"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5, 10, 15, 20]"
+    class="p-datatable-customers"
+    [paginator]="true"
+    [globalFilterFields]="['email', 'lastName', 'firstName', 'roles', 'cursus']"
+    currentPageReportTemplate="{first} à {last} de {totalRecords} utilisateurs"
+    template
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="caption">
+      <div>
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            [(ngModel)]="searchText"
+            (input)="dt1.filterGlobal(searchText, 'contains')"
+            placeholder="Recherche"
+          />
+        </span>
+
+        <em
+          class="pi pi-user-plus plus-position"
+          style="font-size: 1.7rem"
+          (click)="openNew()"
+        ></em>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr [style]="{ width: 'auto !important' }">
+        <th scope="col">Nom</th>
+        <th scope="col">Prénom</th>
+        <th scope="col">Email</th>
+        <th>
+          Date d'ajout
+          <p-columnFilter
+            type="date"
+            field="registrationDate"
+            display="menu"
+          ></p-columnFilter>
+        </th>
+        <th scope="col">
+          Rôle
+          <p-columnFilter
+            field="roles"
+            matchMode="in"
+            display="menu"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+          >
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-multiSelect
+                [options]="filterRoles"
+                [ngModel]="value"
+                optionLabel="name"
+                optionValue="value"
+                placeholder="Rôles"
+                (onChange)="filter($event.value)"
+              >
+                <ng-template let-option pTemplate="item" style="width: 200px">
+                  <div style="width: 20vh">
+                    <span class="role-option">{{ option.name }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th scope="col">Actif</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td [style]="{ width: '16% !important' }">
+          {{ user.lastName | uppercase }}
+        </td>
+        <td [style]="{ width: '16% !important' }">
+          {{ user.firstName | titlecase }}
+        </td>
+        <td [style]="{ width: '16% !important' }">{{ user.email }}</td>
+        <td [style]="{ width: '16% !important' }">
+          {{ user.registrationDate | date : "dd/MM/yyyy" }}
+        </td>
+        <td [style]="{ width: '16% !important' }" class="image-text">
+          <span *ngIf="user.roles == 'ROLE_CANDIDAT'"> Candidat</span>
+          <span *ngIf="user.roles == 'ROLE_ADMIN'"> Admin</span>
+          <span *ngIf="user.roles == 'ROLE_APPRENTI'"> Apprenti</span>
+          <span *ngIf="user.roles == 'ROLE_MENTOR'"> Mentor </span>
+          <span *ngIf="user.roles == 'ROLE_INSCRIT'"> Inscrit</span>
+        </td>
+        <td [style]="{ width: '10% !important' }">
+          <span *ngIf="user.isActivated == true"
+            ><em
+              class="pi pi-verified"
+              style="color: green; font-size: 1.2rem; cursor: pointer"
+              title="Cliquer pour désactiver"
+              (click)="confirmUpdateActivation(user)"
+            ></em
+          ></span>
+          <span *ngIf="user.isActivated == false"
+            ><em
+              class="pi pi-times-circle"
+              style="color: red; font-size: 1.2rem; cursor: pointer"
+              title="Cliquer pour activer"
+              (click)="confirmUpdateActivation(user)"
+            ></em
+          ></span>
+        </td>
+        <td [style]="{ width: '10% !important' }">
+          <em
+            *ngIf="user.roles == 'ROLE_APPRENTI' && user.isActivated == true"
+            class="pi pi-user-edit"
+            (click)="showBasicDialog(user)"
+            style="font-size: 1.4rem; margin-left: 10px; cursor: pointer"
+            title="Modifier l'email"
+          ></em>
+
+          <span
+            *ngIf="user.roles != 'ROLE_APPRENTI' || user.isActivated == false"
+            style="margin-left: 12px; font-weight: bold"
+            >—</span
+          >
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">Pas d'utilisateurs trouvés.</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft" let-state> </ng-template>
+    <ng-template pTemplate="summary">
+      <div
+        class="p-d-flex p-ai-center p-jc-between"
+        style="font-size: 1rem; font-weight: normal"
+      >
+        Au total, il y a {{ users ? users.length : 0 }} utilisateurs.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="displayBasic"
+  [style]="{ width: '520px' }"
+  header="Mettre à jour l'email"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <form [formGroup]="emailForm">
+      <input formControlName="email" pInputText type="text" />
+      <small
+        *ngIf="
+          emailForm.controls['email'].hasError('email') &&
+          emailForm.controls['email'].touched
+        "
+        id="email-validator"
+        class="p-error block"
+        >Il faut saisir un email valide.</small
+      >
+      <small
+        *ngIf="
+          emailForm.controls['email'].hasError('required') &&
+          emailForm.controls['email'].touched
+        "
+        id="email-validator"
+        class="p-error block"
+        >L'email est obligatoire.</small
+      >
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Annuler"
+      icon="pi pi-times"
+      (click)="hideDialog()"
+      class="p-button-text"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Enregistrer"
+      [disabled]="!emailForm.valid"
+      (click)="confirmUpdateEmail()"
+      icon="pi pi-check"
+      class="p-button-text"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="userDialog"
+  [style]="{ width: '450px', top: '25px' }"
+  header="Ajouter un utilisateur"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <form [formGroup]="addUserForm">
+      <div class="field">
+        <label for="name">Nom <span>*</span></label>
+        <input
+          type="text"
+          formControlName="lastName"
+          pInputText
+          id="name"
+          required
+          autofocus
+        />
+        <small
+          *ngIf="
+            addUserForm.controls['lastName'].hasError('required') &&
+            addUserForm.controls['lastName'].touched
+          "
+          id="git-required-validator"
+          class="p-error block"
+          >Un nom est requis.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="name">Prénom <span>*</span></label>
+        <input
+          type="text"
+          formControlName="firstName"
+          pInputText
+          id="name"
+          required
+          autofocus
+        />
+        <small
+          *ngIf="
+            addUserForm.controls['firstName'].hasError('required') &&
+            addUserForm.controls['firstName'].touched
+          "
+          id="git-required-validator"
+          class="p-error block"
+          >Un prénom est requis.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="name">Email <span>*</span></label>
+        <input
+          type="email"
+          formControlName="email"
+          pInputText
+          id="name"
+          required
+          autofocus
+        />
+        <small
+          *ngIf="
+            addUserForm.controls['email'].hasError('email') &&
+            addUserForm.controls['email'].touched
+          "
+          id="email-validator"
+          class="p-error block"
+          >Il faut saisir un email valide.</small
+        >
+        <small
+          *ngIf="
+            addUserForm.controls['email'].hasError('required') &&
+            addUserForm.controls['email'].touched
+          "
+          id="git-required-validator"
+          class="p-error block"
+          >Un email est requis.</small
+        >
+        <small
+          *ngIf="addUserForm.controls['email'].hasError('email-validator')"
+          id="git-required-validator"
+          class="p-error block"
+          >Merci d'entrer un email avec format valide.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="inventoryStatus">Rôle <span>*</span></label>
+        <p-dropdown
+          appendTo="body"
+          (onChange)="getAllCursus()"
+          inputId="inventoryStatus"
+          formControlName="function"
+          placeholder="Choix"
+          [options]="newUserRoles"
+          optionLabel="name"
+          optionValue="value"
+        >
+          <ng-template let-option pTemplate="item">
+            <span [class]="'product-badge status-' + option.value">{{
+              option.name
+            }}</span>
+          </ng-template>
+        </p-dropdown>
+        <small
+          *ngIf="
+            addUserForm.controls['function'].hasError('required') &&
+            addUserForm.controls['function'].touched
+          "
+          id="git-required-validator"
+          class="p-error block"
+          >Le choix du rôle est obligatoire.</small
+        >
+      </div>
+      <div class="field" *ngIf="selectedRole == 'Mentor'">
+        <label for="inventoryStatus">Cursus <span>*</span></label>
+        <p-dropdown
+          inputId="inventoryStatus"
+          formControlName="cursus"
+          placeholder="Choix"
+          [options]="cursusOptions"
+          optionLabel="name"
+          optionValue="id"
+        >
+          <ng-template let-option pTemplate="item">
+            <span [class]="'product-badge status-' + option.value">{{
+              option.name
+            }}</span>
+          </ng-template>
+        </p-dropdown>
+        <small
+          *ngIf="
+            addUserForm.controls['cursus'].hasError('required') &&
+            addUserForm.controls['cursus'].touched
+          "
+          id="git-required-validator"
+          class="p-error block"
+          >Le choix d'un cursus est obligatoire.</small
+        >
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Annuler"
+      (click)="hideDialog()"
+      icon="pi pi-times"
+      class="p-button-text"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Enregistrer"
+      (click)="addUser()"
+      [disabled]="!addUserForm.valid"
+      icon="pi pi-check"
+      class="p-button-text"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog #cd [style]="{ width: '450px' }">
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      icon="pi pi-times"
+      label="Annuler"
+      class="p-button-text"
+      (click)="cd.reject()"
+    ></button>
+    <button
+      class="p-button-text"
+      pButton
+      icon="pi pi-check"
+      label="Confirmer"
+      (click)="cd.accept()"
+    ></button> </ng-template
+></p-confirmDialog>
+
+<p-toast></p-toast>

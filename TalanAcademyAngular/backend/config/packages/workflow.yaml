@@ -1,0 +1,32 @@
+framework:
+    workflows:
+        candidature:
+            type: 'state_machine'
+            audit_trail:
+                enabled: true
+            marking_store:
+                type: 'single_state'
+                arguments:
+                    - 'status'
+            supports:
+                - App\Entity\Candidature
+            initial_place: nouveau
+            places:
+                - nouveau
+                - refused
+                - interview
+                - accepted
+                - abandonment
+            transitions:
+                refuse:
+                    from: [nouveau, interview]
+                    to:   refused
+                invite:
+                    from: [nouveau, interview]
+                    to:   interview
+                accept:
+                    from: interview
+                    to:   accepted
+                withdraw:
+                    from: [interview, accepted]
+                    to: abandonment

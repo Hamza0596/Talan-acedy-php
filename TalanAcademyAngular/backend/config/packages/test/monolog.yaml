@@ -1,0 +1,18 @@
+monolog:
+    channels: ['crossCorrection','jokersRetrait']
+    handlers:
+        cron_correction_logging:
+            type: stream
+            path: "%kernel.logs_dir%/crossCorrection.%kernel.environment%.log"
+            level: debug
+            channels: ["crossCorrection"]
+        cron_joker_logging:
+            type: stream
+            path: "%kernel.logs_dir%/jokersRetrait.%kernel.environment%.log"
+            level: debug
+            channels: ["jokersRetrait"]
+        main:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+            channels: ["!event"]

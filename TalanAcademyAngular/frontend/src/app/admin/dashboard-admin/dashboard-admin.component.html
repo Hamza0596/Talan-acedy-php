@@ -1,0 +1,110 @@
+<div class="card">
+  <!-- <h4 style="border: blue">Tableau De Bord</h4> -->
+  <div class="title">
+    <h1 style="font-size: 1.7rem; text-align: center" s>Tableau De Bord</h1>
+  </div>
+  <div class="align-content-center">
+    <td> <em class="pi pi-chevron-circle-right"> </em> {{ sessionsInProgress}} En cours</td>
+    <td> <em class="pi pi-minus-circle"> </em> {{sessionPlanned}} Planifiées</td>
+    <td> <em class="pi pi-stop-circle"> </em> {{sessionFinished}} Terminées</td>
+    <td> <em class="pi pi-images"></em> {{cursus}} Cursus </td>
+  </div>
+
+  <h4>Mes Sessions</h4>
+  <p-table #dt2 [value]="sessions" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,20,30]"
+    [loading]="loading" [paginator]="true" currentPageReportTemplate="{first} à {last} de {totalRecords} sessions"
+    [globalFilterFields]="['cursus','sessionOrder','startDate','endDate','nbApprentis','averageMoy','percentageRating','advancement']"
+    responsiveLayout="scroll">
+
+    <ng-template pTemplate="caption">
+
+      <div class="flex">
+
+        <!-- <span class="p-input-icon-left ml-auto">
+                  <em class="pi pi-search"></em>
+                    <input pInputText type="text" (input)="dt2.filterGlobal($event.target, 'contains')" placeholder="Recherche" />
+                </span> -->
+
+        <span class="p-input-icon-left ml-auto">
+          <i class="pi pi-search"></i>
+          <input [(ngModel)]="search" pInputText type="text" (input)="dt2.filterGlobal(search,'contains')"
+            placeholder="Recherche" />
+        </span>
+      </div>
+
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between" style="font-size: 1rem; font-weight: normal;">
+        Au total, il y a {{sessions ? sessions.length : 0 }} {{sessions.length > 1 ? "sessions" : "session"}} .
+      </div>
+    </ng-template>
+
+    <ng-template #myTemplate pTemplate="header">
+      <tr [style]="{ width: 'auto !important' }">
+        <th scope="col">Session</th>
+        <th scope="col">Calendrier</th>
+        <th scope="col">Apprentis</th>
+        <th scope="col">Score </th>
+        <th scope="col">Evaluation</th>
+        <th scope="col" style="max-width: 10em;">Progression</th>
+        <th scope="col">Details</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-sessions>
+      <tr>
+        <!-- <td>
+          {{sessions[0].sessionColumn}}#{{sessions[0].sessionOrder}}
+        </td>
+        <td>
+          {{sessions[1].startDate}} ,{{sessions[1].endDate}}
+        </td>
+        <td>
+          {{sessions[2].nbApprentis}}
+        </td>
+        <td>
+          {{sessions[3].averageColumnMoy}}
+        </td>
+        <td>
+          {{sessions[4].notePercentage}}
+        </td>
+        <td>
+          {{sessions[5].advancementColumnTwo}}
+        </td> -->
+        <!---->
+        <td>
+          {{sessions.cursus}} - {{sessions.sessionOrder}}
+        </td>
+        <td>
+          {{sessions.startDate}} -- {{sessions.endDate}}
+        </td>
+        <td>
+          {{sessions.nbApprentis}}
+        </td>
+        <td>
+          {{sessions.averageMoy}}
+        </td>
+        <td>
+          {{sessions.percentageRating}}
+        </td>
+        <td style="max-width: 10em;">
+          <!-- {{sessions.advancement}} -->
+          <!-- <div style="width: 75%; margin: auto;"> <p-progressBar [value]=sessions.advancement
+              [style]="{'font-size' : '12px'}"></p-progressBar>
+          </div> -->
+          <p-chart type="doughnut" [data]=sessions.data [options]=sessions.options></p-chart>
+        </td>
+        <td >
+          <p-button label="Details" styleClass="p-button-sm"
+            (click)="goToDetails(sessions.cursus+' '+sessions.sessionOrder,sessions.sessionId)"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">Pas de ressource trouvée.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

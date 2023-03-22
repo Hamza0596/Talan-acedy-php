@@ -1,0 +1,80 @@
+<div class="card">
+  <div class="flex flex-row flex-wrap card-container blue-container">
+    <p-card
+      class="flex align-items-center justify-content-center m-2"
+      [style]="{ 'margin-top': '20px', width: '16rem' }"
+    >
+      <ng-template pTemplate="header">
+        <img alt="Card" src="../../../assets/img.png" />
+      </ng-template>
+      <h4>Jour de validation</h4>
+      <p-button
+        (click)="showResponsiveDialog()"
+        icon="pi pi-external-link"
+        label=""
+      ></p-button>
+     
+    </p-card>
+  </div>
+</div>
+<p-dialog
+header="Lien Git "
+[(visible)]="displayResponsive"
+[breakpoints]="{ '960px': '75vw' }"
+[style]="{ width: '35vw'}"
+[draggable]="true"
+[resizable]="false"
+>
+<p-tabView>
+  <div class="col-12" *ngIf="
+  submitted
+" style="text-align: center; font-weight: bold; margin-top: 6px; ">
+   Vous avez soumis votre travail , Voulez-vous le modifier ? 
+  </div>
+  
+  <form [formGroup]="soumissionForm" (submit)="submit(dayId)" style="margin-top: 8px;">
+    <div class="field col-12" >
+      <label htmlFor="repoLink">Lien Git</label>
+      <input
+        id="repoLink"
+        type="text"
+        pInputText
+        class="w-full"
+        [ngClass]="{
+          'ng-invalid ng-dirty':
+            (soumissionForm.controls['repoLink'].hasError('required') ||
+              soumissionForm.controls['repoLink'].hasError(
+                'pattern'
+              )) &&
+            soumissionForm.controls['repoLink'].touched
+        }"
+        formControlName="repoLink"
+      />
+      <small
+        *ngIf="
+          soumissionForm.controls['repoLink'].hasError('required') &&
+          soumissionForm.controls['repoLink'].touched
+        "
+        id="git-required-validator"
+        class="p-error block"
+        >Le repo git est requis.</small
+      >
+      <small
+        *ngIf="
+          soumissionForm.controls['repoLink'].hasError('pattern') &&
+          soumissionForm.controls['repoLink'].touched
+        "
+        id="git-pattern-validator"
+        class="p-error block"
+        >Lien git invalide.</small
+      >
+    </div>
+    <button
+      pButton
+      pRipple
+      label="Soumettre"
+      class="w-fit lg:col-offset-9"
+    ></button>
+  </form>
+</p-tabView>
+</p-dialog>

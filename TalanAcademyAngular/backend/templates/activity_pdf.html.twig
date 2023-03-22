@@ -1,0 +1,16 @@
+{% if modules|length == 0 %}
+    <h2>Le cursus ne contient aucun module !</h2>
+
+{% else %}
+
+    {% for key, module in modules %}
+        <div style="margin-bottom: 10px; font-size: 12px">
+        <h2> Module : {{ module.title }}</h2>
+        {% for key, course in module.DayCourses %}
+            <h2> Leçon : {{ course.description }}</h2>
+        {% endfor %}
+        </div>
+    {% endfor %}
+    
+{% endif %}
+

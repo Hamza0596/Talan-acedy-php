@@ -1,0 +1,27 @@
+:host ::ng-deep a.ng-star-inserted {
+    color: black;
+    text-decoration: none;
+}
+
+:host ::ng-deep p-menubar {
+    position: sticky;
+    position: -webkit-sticky; // Needed for Safari browsers.
+    z-index: 10000; // This prevents elements to be seen through the toolbar.
+    top: 0; // Required for "position: sticky" to take effect.
+    display: block;
+   // box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+}
+
+:host ::ng-deep .p-datatable-header {
+    background: white !important;
+}
+
+:host ::ng-deep .p-toast .p-toast-message {
+    margin: 2.5rem 0 1rem 0;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0);
+    border-radius: 3px;
+}
+
+.ui-state-active {
+    background: #d6d6d6;
+}

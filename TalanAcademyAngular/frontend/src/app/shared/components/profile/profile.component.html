@@ -1,0 +1,335 @@
+<div Class="mt-5 margin">
+ 
+
+<button pButton type="button" label="Mon Dashboard" class="p-button-outlined" icon="pi pi-arrow-left " style="font-size: 15px;color: #006dbf;background-color: white ;border: none;cursor: pointer; display: flex; align-items: center;margin-bottom: 10px;"    (click)="back()"></button>
+
+<p-tabView>
+    <p-tabPanel header="Profil">
+      <form [formGroup]="apprentiForm" (submit)="submit()">
+        <div class="p-fluid p-formgrid grid">
+          <div
+            class="field col-12"
+            [style]="{
+              display: 'flex',
+              'justify-content': 'center',
+              'align-items': 'center'
+            }"
+          >
+            <p-avatar
+              pTooltip="changer votre image"
+              tooltipPosition="right"
+              (click)="image.click()"
+              *ngIf="!imageToShow"
+              [style]="{
+                cursor: 'pointer',
+                width: '8rem',
+                height: '8rem',
+                'font-size': '6rem'
+              }"
+              class="inline-flex"
+              [label]="apprenti.firstName![0] + apprenti.lastName![0]"
+              styleClass="p-mr-2"
+              size="xlarge"
+              shape="circle"
+            ></p-avatar>
+            <p-avatar
+              pTooltip="changer votre image"
+              tooltipPosition="right"
+              (click)="image.click()"
+              *ngIf="imageToShow"
+              [style]="{
+                cursor: 'pointer',
+                width: '8rem',
+                height: '8rem',
+                'font-size': '6rem'
+              }"
+              class="inline-flex"
+              [image]="imageToShow"
+              styleClass="p-mr-2"
+              size="xlarge"
+              shape="circle"
+            ></p-avatar>
+            <input
+              #image
+              hidden
+              type="file"
+              (change)="changeImage($event)"
+              accept="image/png, image/gif, image/jpeg, image/jpg"
+            />
+            <small
+              style="margin-left: 10px"
+              *ngIf="errorImageType"
+              id="image-validator"
+              class="p-error block"
+              >Le type de l'image est invalide.</small
+            >
+          </div>
+          <div class="field col-12 md:col-6">
+            <label htmlFor="Nom">Nom *</label>
+            <input
+              id="Nom"
+              type="text"
+              pInputText
+              class="w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  (apprentiForm.controls['lastName'].hasError('required') ||
+                    apprentiForm.controls['lastName'].hasError('minlength')) &&
+                  apprentiForm.controls['lastName'].touched
+              }"
+              formControlName="lastName"
+            />
+            <small
+              *ngIf="
+                apprentiForm.controls['lastName'].hasError('required') &&
+                apprentiForm.controls['lastName'].touched
+              "
+              id="nom-required-validator"
+              class="p-error block"
+              >Le nom est requis.</small
+            >
+            <small
+              *ngIf="
+                apprentiForm.controls['lastName'].hasError('minlength') &&
+                apprentiForm.controls['lastName'].touched
+              "
+              id="nom-minlength-validator"
+              class="p-error block"
+              >Le nom doit comporter au moins 3 caractères.</small
+            >
+          </div>
+          <div class="field col-12 md:col-6">
+            <label htmlFor="Prenom">Prénom *</label>
+            <input
+              id="Prenom"
+              type="text"
+              pInputText
+              class="w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  (apprentiForm.controls['firstName'].hasError('required') ||
+                    apprentiForm.controls['firstName'].hasError('minlength')) &&
+                  apprentiForm.controls['firstName'].touched
+              }"
+              formControlName="firstName"
+            />
+            <small
+              *ngIf="
+                apprentiForm.controls['firstName'].hasError('required') &&
+                apprentiForm.controls['firstName'].touched
+              "
+              id="prenom-required-validator"
+              class="p-error block"
+              >Le prénom est requis.</small
+            >
+            <small
+              *ngIf="
+                apprentiForm.controls['firstName'].hasError('minlength') &&
+                apprentiForm.controls['firstName'].touched
+              "
+              id="prenom-minlength-validator"
+              class="p-error block"
+              >Le prénom doit comporter au moins 3 caractères.</small
+            >
+          </div>
+          <div class="field col-12 md:col-6">
+            <label htmlFor="email">Email</label>
+            <input pInputText id="email" type="text" formControlName="email" />
+          </div>
+          <div class="field col-12 md:col-6">
+            <label htmlFor="telephone">Téléphone *</label>
+            <p-inputNumber
+              id="telephone"
+              class="w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  (apprentiForm.controls['tel'].hasError('required') ||
+                    apprentiForm.controls['tel'].hasError('min') ||
+                      apprentiForm.controls['tel'].hasError('max')) &&
+                  apprentiForm.controls['tel'].touched
+              }"
+              formControlName="tel"
+            ></p-inputNumber>
+            <small
+              *ngIf="
+                apprentiForm.controls['tel'].hasError('required') &&
+                apprentiForm.controls['tel'].touched
+              "
+              id="tel-required-validator"
+              class="p-error block"
+              >Le numéro de téléphone est requis.</small
+            >
+            <small
+              *ngIf="
+                (apprentiForm.controls['tel'].hasError('min') ||
+                  apprentiForm.controls['tel'].hasError('max')) &&
+                apprentiForm.controls['tel'].touched
+              "
+              id="tel-length-validator"
+              class="p-error block"
+              >Le numéro de téléphone doit être composé de 8 chiffres.</small
+            >
+          </div>
+          <div class="field col-12">
+            <label htmlFor="linkedin">Linkedin</label>
+            <input
+              id="linkedin"
+              type="text"
+              pInputText
+              class="w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  apprentiForm.controls['linkedin'].hasError('pattern') &&
+                  apprentiForm.controls['linkedin'].touched
+              }"
+              formControlName="linkedin"
+            />
+            <small
+              *ngIf="
+                apprentiForm.controls['linkedin'].hasError('pattern') &&
+                apprentiForm.controls['linkedin'].touched
+              "
+              id="linkedin-pattern-validator"
+              class="p-error block"
+              >Renseigner un compte Linkedin valide.</small
+            >
+          </div>
+          <button
+            pButton
+            pRipple
+            label="Submit"
+            class="w-full lg:col-offset-9"
+          ></button>
+        </div>
+      </form>
+    </p-tabPanel>
+    <p-tabPanel header="Paramètres">
+      <form [formGroup]="passwordForm" (submit)="changePassword()">
+        <div class="p-fluid p-formgrid grid">
+          <div [formGroup]="apprentiForm" class="field col-12 md:col-6">
+            <label htmlFor="email">Email</label>
+            <input pInputText id="emaill" type="text" formControlName="email" />
+          </div>
+          <div class="field col-12 md:col-6">
+            <label htmlFor="password">Mot de passe actuel *</label>
+            <input
+              autocomplete="new-password"
+              type="password"
+              pInputText
+              id="passwordActuel"
+              class="w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  passwordForm.controls['oldpassword'].hasError('required') &&
+                  passwordForm.controls['oldpassword'].touched
+              }"
+              formControlName="oldpassword"
+            />
+            <small
+              *ngIf="
+                passwordForm.controls['oldpassword'].hasError('required') &&
+                passwordForm.controls['oldpassword'].touched
+              "
+              id="linkedin-validator"
+              class="p-error block"
+              >Le mot de passe actuel est requis.</small
+            >
+            <small
+              *ngIf="
+                passwordForm.controls['oldpassword'].hasError('pattern') &&
+                passwordForm.controls['oldpassword'].touched
+              "
+              id="password-pattern-validator"
+              class="p-error block"
+            >
+              Entrer un mot de passe, au minimum 8 caractères
+              contenant[A-Z][0-9][/@!?:)]
+            </small>
+          </div>
+          <div class="field col-12 md:col-6">
+            <label htmlFor="newPassword">Nouveau mot de passe *</label>
+            <input
+              type="password"
+              pInputText
+              id="newPassword"
+              class="w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  (passwordForm.controls['password'].hasError('required') ||
+                    passwordForm.controls['password'].hasError('pattern')) &&
+                  passwordForm.controls['password'].touched
+              }"
+              formControlName="password"
+            />
+            <small
+              *ngIf="
+                passwordForm.controls['password'].hasError('required') &&
+                passwordForm.controls['password'].touched
+              "
+              id="password-validator"
+              class="p-error block"
+              >Le nouveau mot de passe est requis.</small
+            >
+            <small
+              *ngIf="
+                passwordForm.controls['password'].hasError('pattern') &&
+                passwordForm.controls['password'].touched
+              "
+              id="password-pattern-validator"
+              class="p-error block"
+            >
+              Entrer un mot de passe, au minimum 8 caractères
+              contenant[A-Z][0-9][/@!?:)]
+            </small>
+          </div>
+          <div class="field col-12 md:col-6">
+            <label htmlFor="confirmPassword"
+              >Confirmation du mot de passe *</label
+            >
+            <input
+              type="password"
+              pInputText
+              id="confirmPassword"
+              class="w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  (passwordForm.controls['confirmPassword'].hasError(
+                    'required'
+                  ) ||
+                    passwordForm.controls['confirmPassword'].value !=
+                      passwordForm.controls['password'].value) &&
+                  passwordForm.controls['confirmPassword'].touched
+              }"
+              formControlName="confirmPassword"
+            />
+            <small
+              *ngIf="
+                passwordForm.controls['confirmPassword'].hasError('required') &&
+                passwordForm.controls['confirmPassword'].touched
+              "
+              id="confirmPassword-validator"
+              class="p-error block"
+              >Le mot de passe de confirmation est requis.</small
+            >
+            <small
+              *ngIf="
+                passwordForm.controls['confirmPassword'].touched &&
+                passwordForm.controls['confirmPassword'].value !=
+                  passwordForm.controls['password'].value
+              "
+              id="confirmPassword-validator"
+              class="p-error block"
+              >Le mot de passe ne correspond pas.</small
+            >
+          </div>
+          <button
+            pButton
+            pRipple
+            label="Submit"
+            class="w-full lg:col-offset-9"
+          ></button>
+        </div>
+      </form>
+    </p-tabPanel>
+  </p-tabView>
+</div>

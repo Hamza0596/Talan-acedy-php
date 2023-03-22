@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+
+.swal2-popup {
+    font-size: 0.1rem !important;
+    font-family: Georgia, serif;
+}
+
+@font-face {
+    font-family: "Roboto", sans-serif;
+    src: url(assets/Roboto/Roboto-Black.ttf) format("truetype");
+}
+
+* {
+    font-family: "Roboto", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #333;
+}
+
+.card {
+    color: #495057;
+}

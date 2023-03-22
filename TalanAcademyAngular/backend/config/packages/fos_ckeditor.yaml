@@ -1,0 +1,27 @@
+# Read the documentation: https://symfony.com/doc/current/bundles/FOSCKEditorBundle/index.html
+
+twig:
+    form_themes:
+        - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+fos_ck_editor:
+    configs:
+        default:
+            toolbar: "my_toolbar"
+            stylesSet: "my_styles"
+            filebrowserBrowseRoute: elfinder
+            filebrowserBrowseRouteParameters: []
+
+
+    styles:
+        my_styles:
+            - { name: 'italic Title', element: 'span', attributes: { 'class': 'font-italic' } }
+            - { name: "Titre 1", element: "h1", styles: { color: "Blue" }}
+            - { name: "Titre 2", element: "h2", styles: { color: "Blue" }}
+            - { name: "Titre 3", element: "h3", styles: { color: "Blue" }}
+
+
+    toolbars:
+        configs:
+            my_toolbar: [ ['Find','-','SelectAll','-','SpellChecker' ],[ "Maximize" ],['Undo','Redo'],[ 'Bold','Italic','Underline','Strike', 'Blockquote','Subscript','Superscript','RemoveFormat'],['NumberedList','BulletedList','-','Outdent','Indent','-','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' ], [ 'Link','Unlink' ],[ 'pbckcode','Image', 'FLlash', 'Table','SpecialChar','Smiley' ],["Preview"],["Print"],"/",[ 'Styles', 'Format','Font','FontSize' ],[ 'TextColor','BGColor' ]]
+
+

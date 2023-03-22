@@ -1,0 +1,251 @@
+<div>
+  <div *ngIf="visibleSidebar">
+      <div >
+          <p-tree #myDivScrollable *ngIf="innerWidth > 960" [value]="nodes" [(selection)]="selectedFile" [style]="{ border: 'none', 'background-color': 'none' }" class="layout-sidebar">
+              <ng-template let-node pTemplate="url" selectionMode="single">
+                <div class="flex justify-content-between align-items-center scrollable" #myDiv>
+                  
+                  <!-- <a class="second-title" *ngIf="currentDayLesson != node.label" (click)="selectCourse(node.data)">{{ node.key }}.{{ node.key1 }}&nbsp;&nbsp;{{ node.label }}</a> -->
+                  <a class="second-title" *ngIf="currentDayLesson != node.label" (click)="selectCourse(node.data, node.label, node.key, node.key1, node.indexLesson)">{{ node.label }}</a>
+                  <!-- <a class="second-title" *ngIf="currentDayLesson == node.label" (click)="selectCourse(node.data)">{{ node.key }}.{{ node.key1 }}&nbsp;&nbsp;{{ node.label }}</a> -->
+                  <a class="second-title" *ngIf="currentDayLesson == node.label" (click)="selectCourse(node.data, node.label, node.key, node.key1, node.indexLesson)">{{ node.label }}</a>
+                  <em
+              class="pi pi-calendar-times"
+              style="margin-left: 10px"
+              *ngIf="node.status == 'jour-validant'"
+            ></em>
+            <em
+              class="pi pi-check-circle"
+              style="margin-left: 10px"
+              *ngIf="node.status == 'jour-correction'"
+            ></em>
+                </div>
+              </ng-template>
+              <ng-template let-node pTemplate="default">
+                  <!-- <strong class="first-title" *ngIf="currentDayModule != node.label">{{ node.key }}-{{ node.label }}</strong> -->
+                  <strong class="first-title" *ngIf="currentDayModule != node.label" (click)="selectModule(node.label, node.key)">{{ node.label }}</strong>
+                  <!-- <strong class="first-title" *ngIf="currentDayModule == node.label">{{ node.key }}-{{ node.label }}</strong> -->
+                  <strong class="first-title" *ngIf="currentDayModule == node.label" (click)="selectModule(node.label, node.key)">{{ node.label }}</strong>
+              </ng-template>
+          </p-tree>
+      </div>
+      <div class="ml-2 col-12" *ngIf="innerWidth <= 960">
+          <ul style="list-style-type: none" class="traitgauche">
+              <li class="sidenav" *ngFor="let title of list; let index = index" style="padding: 7px" id="id" [ngStyle]="{
+        'padding-left':
+          title === 'Synopsis' ||
+          title === 'Ressources' ||
+          title === 'Activités'
+            ? '0px'
+            : '11px'
+      }" [ngClass]="{ btnLight: id == index }">
+                  <a class="sidenav" (click)="goTo(index)">
+          {{ title }}
+        </a>
+              </li>
+              <div *ngIf="reviewResult?.message == 'Aucune évaluation trouvée!'" style="margin-right: 5px;">
+                  <button (click)="avis.toggle($event)" style="  font-size:15px ; margin-top: 10px;
+            "><em class="fa fa-star"></em> Noter cette lesson ?</button>
+              </div>
+          </ul>
+      </div>
+      <p-toast [styleClass]="'custom-toast-style'" position="bottom-right" [style]="{width: 'fit-content'}" key="bc"></p-toast>
+      <div class="flex">
+          <div class="xl:col-6 lg:col-5 card" [style]="
+      innerWidth > 1536 ? { 'margin-left': '20%', 'padding-right': 'calc('+(innerWidth/1000)+'%)', 'width': '60%' } : innerWidth > 1280 ? { 'margin-left': '23%', 'padding-right': 'calc('+((innerWidth)/770)+'%)', 'width': '55%' } : innerWidth > 960 ? { 'margin-left': '29%', 'padding-right': 'calc('+(innerWidth/200)+'%)', 'width': '45%' } : { 'margin-left': '0', 'width': '100%' }">
+              <div #synopsisId>
+                  <div class="flex" [ngClass]="{'align-items-start': innerWidth > 576, 'justify-content-start': innerWidth <= 576, 'flex-column': innerWidth <= 576}">
+                      <span class="h1">{{type}}&nbsp;&nbsp;{{ key }}<span *ngIf="key1">.</span>{{ key1 }} :&nbsp;&nbsp;</span>
+                      <h1>{{ firstTitle }}</h1>
+                  </div>
+                  <div *ngIf="moduleSelected">
+                      <h2>Description</h2>
+                      <p [innerHTML]="description"></p>
+                  </div>
+                  <div *ngIf="!moduleSelected">
+                      <h2>Synopsis</h2>
+                      <p [innerHTML]="selectedSynopsis"></p>
+                  </div>
+                  <div *ngIf="!moduleSelected">
+                      <h2>Ressources</h2>
+                      <p>Voilà les références théoriques du jour :</p>
+
+                      <div class="resource flex align-items-center" style="height: 35px" *ngFor="let resource of listResource; let i = index">
+                          <div class="flex align-items-center justify-content-around" style="width: 7rem">
+                              <button pButton icon="pi pi-thumbs-up" (click)="like(resource.id, i)" [ngStyle]="{
+                display: resource.disliked ? 'none' : 'inline-block'
+              }" [disabled]="resource.liked || resource.disliked" class="p-button-rounded p-button-text"></button><span [ngClass]="{
+                borderSpanLeft: resource.liked,
+                borderSpanRight: resource.disliked
+              }">{{ resource.score }}</span>
+                              <button pButton icon="pi pi-thumbs-down" (click)="dislike(resource.id, i)" [ngStyle]="{
+                display: resource.liked ? 'none' : 'inline-block'
+              }" [disabled]="resource.liked || resource.disliked" class="p-button-rounded p-button-text"></button>
+                          </div>
+                          <a href="{{ resource.url }}" style="color: black" target="_blank" rel="noopener">
+                              <p style="margin-left: 17px">{{ resource.title }}</p>
+                          </a>
+                          <!-- </div> -->
+                      </div>
+                      <div>
+                          <a (click)="openNew()">
+                              <h4 class="proposition" id="title">Voulez vous proposer d'autres ressources <span>?</span>&nbsp; &nbsp;&nbsp;&nbsp;
+                                  <button pButton pRipple type="button" icon="pi pi-file-export" class="p-button-rounded p-button-outlined"></button>
+                              </h4>
+                          </a>
+
+                      </div>
+                      <p style="color: #270">{{succesMessage}}</p>
+                      <p-dialog [(visible)]="productDialog" [style]="{width: '550px'}" header="Proposer une ressource" [modal]="true" styleClass="p-fluid">
+
+                          <ng-template pTemplate="content">
+                              <form [formGroup]="proposForm">
+                                  <div class="p-field" style="margin-bottom: 15px;">
+                                      <label for="name">Titre</label>
+                                      <input type="text" pInputText id="Titre" required [ngClass]="{'ng-invalid ng-dirty': (proposForm.controls['title'].hasError('required')) && proposForm.controls['title'].touched}" formControlName="title" />
+                                      <small *ngIf="proposForm.controls['title'].hasError('required') && proposForm.controls['title'].touched" class="p-error block">Proposer un titre de ressource.</small>
+                                      <small *ngIf="proposForm.get('title')?.hasError('minlength')" class="p-error block">Le titre doit
+                    comporte 3 caractères au minimum.</small>
+                                  </div>
+
+                                  <div class="p-formgrid p-grid" style="margin-bottom: 15px;">
+                                      <div class="p-field p-col">
+                                          <label for="name">Lien</label>
+                                          <input type="text" pInputText id="Lien" required [ngClass]="{'ng-invalid ng-dirty': (proposForm.controls['url'].hasError('required')) && proposForm.controls['url'].touched}" formControlName="url" />
+                                          <small *ngIf="proposForm.controls['url'].hasError('required') && proposForm.controls['url'].touched" class="p-error block">Le lien de la ressource est obligatoire.</small>
+                                          <small *ngIf="proposForm.get('url')?.hasError('pattern')" class="p-error block">Proposer une ressource valide</small>
+                                      </div>
+
+                                  </div>
+
+                                  <div class="p-field">
+                                      <label for="description">Description</label>
+                                      <textarea id="description" pInputTextarea required rows="3" cols="20" [ngClass]="{'ng-invalid ng-dirty': (proposForm.controls['comment'].hasError('required')) && proposForm.controls['comment'].touched}" formControlName="comment"></textarea>
+
+                                      <small *ngIf="proposForm.controls['comment'].hasError('required') && proposForm.controls['comment'].touched" class="p-error block">Votre commentaire est obligatoire.</small>
+                                      <small *ngIf="proposForm.get('comment')?.hasError('minlength')" class="p-error block">Votre
+                    commentaire doit comporter 3 caractères au minimum.</small>
+                                  </div>
+                              </form>
+                          </ng-template>
+
+                          <ng-template pTemplate="footer">
+                              <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                              <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" [disabled]="proposForm.invalid" (click)="proposeRessources()"></button>
+                          </ng-template>
+                          <div class="p-field">
+                              <p style="color: #D8000C">{{messageFailure}}</p>
+                          </div>
+                      </p-dialog>
+                  </div>
+                  <div *ngIf="!moduleSelected">
+                      <h2>Activités</h2>
+                      <p-accordion>
+                          <p-accordionTab [header]="key + '.' + key1 + '.' + (i + 1) + '. ' + lesson.title" [selected]="i == 0" *ngFor="let lesson of selectedLessonActivities; let i = index">
+                              <p [innerHTML]="lesson.content" [ngStyle]="{'overflow': innerWidth < 576 ? 'scroll' : 'inherit'}"></p>
+                          </p-accordionTab>
+                      </p-accordion>
+                  </div>
+              </div>
+              <!-- <div class="flex align-items-center">
+            <p style="margin-left: 5px; width: 300px">{{ resource.title }}</p>
+            <a href="{{ resource.url }}" style="margin-left: 25px; color: black" target="_blank" rel="noopener"><em
+                class="pi pi-link"></em></a>
+          </div> -->
+          </div>
+          <div class="ml-7" *ngIf="innerWidth > 960">
+              <ul style="position: fixed; list-style-type: none;" class="traitgauche" [ngStyle]="{'left': innerWidth > 1536 ? '84%' : innerWidth > 1280 ? '81%' : innerWidth > 1024 ? '77%': '75%'}">
+                  <li [class]="'sidenav' + index" [attr.id]="index" (window:scroll)="onScroll()" *ngFor="let title of list; let index = index" style="padding: 7px" [ngStyle]="{
+          'padding-left':
+            title == firstTitle ||
+            title === 'Synopsis' ||
+            title === 'Ressources' ||
+            title === 'Activités'
+              ? '0px'
+              : '11px'
+}" [ngClass]="{ btnLight: id == index }">
+                      <a class="sidenav" (click)="goTo(index)">
+            {{ title }}
+          </a>
+                  </li>
+                  <div *ngIf="reviewResult?.message == 'Aucune évaluation trouvée!' && displayNoteLesson" style="margin-right: 5px;">
+                      <button (click)="avis.toggle($event)" style="  font-size:15px ; margin-top: 10px;
+          "> <i class="fa fa-star"></i> Noter cette lesson</button>
+                  </div>
+              </ul>
+          </div>
+      </div>
+  </div>
+
+
+  <p-overlayPanel #avis [dismissable]="false" [style]="{ 'min-width': '410px', 'margin-left': '-15px' }" (onHide)="hideAvis()">
+      <ng-template pTemplate>
+          <h3>Votre avis sur cette leçon ?</h3>
+          <div [formGroup]="avisForm" style="text-align: center">
+              <div>
+                  <p-rating [cancel]="false" formControlName="rating"></p-rating>
+                  <div *ngIf="avisForm.value.rating === 1">
+                      <div>
+                          <img src="assets/emojis/angry.svg" alt="angry" height="30px" style="margin-top: 10px" />
+                      </div>
+                      <div>Cette journée m'a <strong>énervé</strong>.</div>
+                      <div>
+                          Le cours m'a <strong>perdu</strong> et je n'ai
+                          <strong>pas apprécié</strong> les activités.
+                      </div>
+                  </div>
+                  <div *ngIf="avisForm.value.rating === 2">
+                      <div>
+                          <img src="assets/emojis/frown.svg" alt="frown" height="30px" style="margin-top: 10px" />
+                      </div>
+                      <div>Franchement c'était <strong>pas top</strong>.</div>
+                      <div>
+                          C'était <strong>pas clair</strong> et/ou
+                          <strong>mal écris</strong>. Les activités n'avaient
+                          <strong>pas un grand intérêt</strong>.
+                      </div>
+                  </div>
+                  <div *ngIf="avisForm.value.rating === 3">
+                      <div>
+                          <img src="assets/emojis/meh-face-emoticon.svg" alt="meh-face-emoticon" height="30px" style="margin-top: 10px" />
+                      </div>
+                      <div>C'était <strong>pas mal</strong>.</div>
+                      <div>J'ai quelques remarques et/ou suggestions...</div>
+                  </div>
+                  <div *ngIf="avisForm.value.rating === 4">
+                      <div>
+                          <img src="assets/emojis/smile.svg" alt="smile" height="30px" style="margin-top: 10px" />
+                      </div>
+                      <div>C'était <strong>bien</strong>.</div>
+                      <div>
+                          Le cours était <strong>clair</strong> et les activités
+                          <strong>intéressentes !</strong>
+                      </div>
+                  </div>
+                  <div *ngIf="avisForm.value.rating === 5">
+                      <div>
+                          <img src="assets/emojis/emoticon-hearts.svg" alt="emoticon-hearts" height="30px" style="margin-top: 10px" />
+                      </div>
+                      <div><strong>WAOW !</strong>.</div>
+                      <div>J'ai <strong>adoré</strong> la journée !</div>
+                  </div>
+              </div>
+              <div>
+                  <textarea placeholder="commentaire" pInputTextarea formControlName="comment" class="w-full mt-2" [ngClass]="{
+        'ng-invalid ng-dirty':
+          avisForm.hasError('commentRequired') &&
+          avisForm.controls['rating'].touched
+      }"></textarea>
+              </div>
+          </div>
+          <small class="p-error block" *ngIf="
+    avisForm.hasError('commentRequired') &&
+    avisForm.controls['rating'].touched
+  ">Le commentaire est obligatoire</small>
+          <div style="text-align: right; margin-top: 5px">
+              <button pButton pRipple label="Annuler &nbsp; &nbsp;" icon="pi pi-times" class="p-button-text" (click)="avis.hide()"></button>
+              <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="addEval(avis)" [disabled]="avisForm.invalid"></button>
+          </div>
+      </ng-template>
+  </p-overlayPanel>
+</div>

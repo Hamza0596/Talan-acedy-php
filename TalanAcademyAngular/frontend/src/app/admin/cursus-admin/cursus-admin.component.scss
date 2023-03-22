@@ -1,0 +1,222 @@
+.card {
+  padding: 2em;
+  font-family: -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Helvetica,
+    Arial, sans-serif, “Apple Color Emoji”, “Segoe UI Emoji”, “Segoe UI Symbol”;
+  tr {
+    width: 12px !important;
+    font-size: 15px !important;
+  }
+  th {
+    font-size: 14px !important;
+  }
+}
+.p-toolbar {
+  border-radius: 0;
+}
+:host ::ng-deep {
+  .p-paginator {
+    .p-paginator-current {
+      margin-left: auto;
+    }
+  }
+
+  .p-progressbar {
+    height: 0.5rem;
+    background-color: #d8dadc;
+
+    .p-progressbar-value {
+      background-color: #607d8b;
+    }
+  }
+
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .p-calendar .p-datepicker {
+    min-width: 25rem;
+
+    td {
+      font-weight: 400;
+    }
+  }
+
+  .p-datatable.p-datatable-customers {
+    .p-datatable-header {
+      padding: 1rem;
+      text-align: left;
+      font-size: 1.5rem;
+    }
+
+    .p-paginator {
+      padding: 1rem;
+    }
+
+    .p-datatable-thead > tr > th {
+      text-align: left;
+    }
+
+    .p-datatable-tbody > tr > td {
+      cursor: auto;
+    }
+
+    .p-dropdown-label:not(.p-placeholder) {
+      text-transform: uppercase;
+    }
+  }
+
+  /* Responsive */
+  .p-datatable-customers .p-datatable-tbody > tr > td .p-column-title {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  :host ::ng-deep {
+    .p-datatable {
+      &.p-datatable-customers {
+        .p-datatable-thead > tr > th,
+        .p-datatable-tfoot > tr > td {
+          display: none !important;
+        }
+
+        .p-datatable-tbody > tr {
+          border-bottom: 1px solid var(--layer-2);
+
+          > td {
+            text-align: left;
+            display: block;
+            border: 0 none !important;
+            width: 100% !important;
+            float: left;
+            clear: left;
+
+            .p-column-title {
+              padding: 0.4rem;
+              min-width: 30%;
+              display: inline-block;
+              margin: -0.4rem 1rem -0.4rem -0.4rem;
+              font-weight: bold;
+            }
+
+            .p-progressbar {
+              margin-top: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .p-toolbar {
+  border-radius: 0px;
+}
+
+:host ::ng-deep .p-component {
+  font-size: 0.8rem;
+}
+// :host ::ng-deep .p-paginator .p-dropdown {
+
+//   height: 2rem;
+// }
+:host ::ng-deep .p-inputtext {
+  padding-right: 65px;
+}
+
+:host ::ng-deep.p-button.p-button-success,
+.p-buttonset.p-button-success > .p-button,
+.p-splitbutton.p-button-success > .p-button {
+  color: #ffffff;
+  background: #006db6;
+  border: 1px solid #006db6;
+}
+
+:host ::ng-deep .p-link {
+  font-size: 0.8rem;
+}
+:host ::ng-deep.p-inputtext {
+  font-size: 0.8rem;
+}
+:host ::ng-deep.p-button.p-button-success:enabled:hover,
+.p-buttonset.p-button-success > .p-button:enabled:hover,
+.p-splitbutton.p-button-success > .p-button:enabled:hover {
+  background: #0079ca;
+  color: #ffffff;
+  border-color: #0079ca;
+}
+
+@media (max-width: 660px) {
+  .container1 {
+    display: flex;
+    flex-direction: column;
+  }
+  .span1 {
+    width: 100%;
+  }
+  .span2 {
+    width: 100%;
+  }
+  :host ::ng-deep .p-inputtext {
+    margin-top: 8px;
+    padding-right: 65px;
+  }
+}
+:host ::ng-deep.p-datatable-header {
+  background: #f8f9fa !important;
+}
+
+:host ::ng-deep.p-component {
+  font-size: 1rem;
+}
+
+:host ::ng-deep .p-tag {
+  background: #0079ca;
+
+  margin: 2px;
+}
+.title {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem !important;
+  border-radius: 5px;
+}
+
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+header h1 {
+  text-align: center;
+}
+
+.main {
+  width: 80%;
+  padding: 3px;
+}
+
+div {
+  margin-bottom: 20px;
+}
+p{
+  margin-left: 5px;
+}
+
+.justified-text {
+  text-align: justify;
+}
+.marTitre{
+  margin-left: 30px
+}
+
+
+
+:host ::ng-deep.p-inputtext {
+  padding-right: 16px;
+}
+

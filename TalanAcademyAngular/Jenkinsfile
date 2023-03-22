@@ -1,0 +1,15 @@
+pipeline {
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        sh 'composer install -d ./backend'
+        sh 'npm install'
+        dir('./frontend') {
+          sh 'npm install'
+          sh 'npm run build'
+        }
+      }
+    }
+  }
+}

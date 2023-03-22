@@ -1,0 +1,26 @@
+
+    <form [formGroup]="loginForm" (submit)="login()">
+        <div class="text-center mt-5 mb-5">
+            <img src="assets/talanLogoBlack.png" alt="Image" height="50" class="mb-3">
+            <div class="text-900 text-3xl font-medium mb-3">Bienvenue</div>
+            <span class="text-600 font-medium line-height-3">Vous n'avez pas de compte ?</span>
+            <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Créez-le dès aujourd'hui !</a>
+        </div>
+    
+        <div>
+            <label for="email" class="block text-900 font-medium mb-2">Email</label>
+            <input id="email" type="text" pInputText class="w-full" [ngClass]="{'ng-invalid ng-dirty': (loginForm.controls['username'].hasError('required')||loginForm.controls['username'].hasError('email')) && loginForm.controls['username'].touched}" formControlName="username">
+            <small *ngIf="loginForm.controls['username'].hasError('email') && loginForm.controls['username'].touched" id="email-validator" class="p-error block">Email is not valid.</small>
+            <small *ngIf="loginForm.controls['username'].hasError('required') && loginForm.controls['username'].touched" id="email-validator" id="email-required" class="p-error block">L'email est obligatoire.</small>
+    
+            <label for="password" class="block text-900 font-medium mb-2 mt-3">Mot de passe</label>
+            <input id="password" type="password" pInputText class="w-full"  [ngClass]="{'ng-invalid ng-dirty': loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched}" formControlName="password">
+            <small *ngIf="loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched" id="email-validator" id="password-required" class="p-error block">Le mot de passe est obligatoire.</small>
+    
+            <div class="flex align-items-center justify-content-between my-3">
+                <a class="font-medium no-underline mr-2 text-blue-500 text-right cursor-pointer">Mot de passe oublié ?</a>
+            </div>
+    
+            <button pButton pRipple label="S'identifier" icon="pi pi-user" class="w-full" [disabled]="!submitStat"></button>
+        </div>
+    </form>

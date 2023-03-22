@@ -1,0 +1,225 @@
+.layout-sidebar {
+  position: fixed;
+  width: 270px;
+  height: calc(100vh);
+  z-index: 999;
+  overflow-y: auto;
+  user-select: none;
+  padding-top: 1rem;
+  top: 3.5rem;
+  left: 0px;
+  color: #faf7f7;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.02), 0px 0px 2px rgba(0, 0, 0, 0.05),
+    0px 1px 4px rgba(0, 0, 0, 0.08);
+  background-color: #f2f2f2;
+}
+
+.fixed-title {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.resource {
+  background-color: #f2f2f2;
+  padding: 27px 17px;
+  border-radius: 7px;
+  margin: 7px 0;
+}
+
+.resource > a {
+  text-decoration: none;
+}
+
+.resource > a:hover {
+  color: #134b8b !important;
+  font-weight: bold;
+}
+
+.resource > div {
+  background-color: #dbdbdb;
+  padding: 3px 7px;
+  border-radius: 7px;
+}
+
+.resource > div > span {
+  border-left: white 1px solid;
+  border-right: white 1px solid;
+  padding: 0 11px;
+}
+
+.borderSpanLeft {
+  border-right: inherit !important;
+  padding-left: 1rem !important;
+}
+
+.h1 {
+  color: #333;
+  display: block;
+  font-size: 2em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+}
+
+.borderSpanRight {
+  border-left: inherit !important;
+  padding-right: 1rem !important;
+}
+
+.sidenav0 {
+  border-bottom: 1px solid #dbdbdb;
+  font-size: 17px;
+  margin-bottom: 17px;
+}
+
+:host ::ng-deep .p-tree {
+  p {
+    color: #2196f3;
+  }
+  padding: 0;
+}
+
+.card {
+  margin-left: 300px;
+  text-align: justify;
+}
+
+.logo-container {
+  position: sticky;
+  display: block;
+}
+
+.activeDiv {
+  background-color: #e0e0e0;
+  color: #252525 !important;
+  font-weight: bold;
+}
+
+.btnLight {
+  color: #134b8b;
+  list-style-type: disc !important;
+  font-weight: bold;
+}
+
+.p-button-rounded {
+  color: #134b8b;
+}
+
+.highlighted {
+  color: red;
+}
+
+.traitgauche {
+  border-left: 1px solid #dbdbdb;
+  font-size: 17px;
+  padding-left: 13px;
+}
+
+::ng-deep .p-treenode-content {
+  padding: 0 !important;
+}
+
+::ng-deep .p-treenode-content:hover {
+  background-color: #dbdbdb;
+  cursor: pointer;
+  color: #134b8b;
+}
+
+::ng-deep .p-tree .p-treenode-children {
+  padding: 0;
+}
+
+::ng-deep .p-tree {
+  background-color: transparent;
+}
+
+p > img {
+  width: 100% !important;
+}
+
+::ng-deep .p-link {
+  margin: 0.3rem !important;
+}
+
+.p-button.p-button-icon-only {
+  width: 1.7rem;
+  padding: 0.2rem 0;
+  height: 1.8rem;
+}
+
+.first-title {
+  font-weight: normal;
+}
+
+.second-title {
+  color: #495057 !important;
+  font-size: 15px;
+}
+
+.second-title:hover {
+  color: #134b8b !important;
+}
+
+.sidenav:hover {
+  cursor: pointer;
+  color: #134b8b;
+}
+
+.note {
+  cursor: pointer;
+  text-decoration: underline;
+  color: blue;
+}
+.proposition {
+  color: #134b8b;
+  cursor: pointer;
+}
+
+button {
+  background: none;
+  border: none;
+  color: rgb(21, 82, 188);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+}
+
+button i {
+  margin-right: 10px;
+}
+
+button:hover {
+  color: #0070ba;
+}
+
+:host ::ng-deep .custom-toast-style {
+    font-size: large !important;
+}
+
+:host ::ng-deep .p-toast-message {
+    background-color: rgb(233, 246, 255) !important;
+    border: solid #134b8b !important;
+    border-width: 0 0 0 6px !important;
+    color: #134b8b !important;
+}
+
+:host ::ng-deep .p-toast-icon-close,
+:host ::ng-deep .p-toast-message-icon {
+    color: #134b8b !important;
+}
+
+
+
+
+  .indicator {
+    width: 210px
+  }
+
+  .indicator1 {
+    width: 195px
+  }
+
+  

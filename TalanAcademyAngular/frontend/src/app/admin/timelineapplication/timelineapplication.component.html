@@ -1,0 +1,97 @@
+<div class="card">
+  <div class="title">
+    <h1 style="font-size: 1.7rem; text-align: center" s>
+      Gestion des candidatures
+    </h1>
+  </div>
+  <!-- Le tableau -->
+  <p-table
+    #dt
+    [value]="candidatures"
+    dataKey="id"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 15, 20]"
+    [loading]="loading"
+    [paginator]="true"
+    currentPageReportTemplate="{first} à {last} de {totalRecords} candidatures"
+    [globalFilterFields]="['name', 'tags']"
+    responsiveLayout="scroll"
+    >
+    <ng-template #myTemplate pTemplate="header"
+      >
+      <tr [style]="{ width: 'auto !important' }">
+        <th scope="col" style="text-align: center">Nom</th>
+        <th scope="col" style="text-align: center">Prénom</th>
+        <th scope="col" style="text-align: center">E-mail</th>
+        <th scope="col" style="text-align: center">Date</th>
+        <th scope="col" style="text-align: center">Status</th>
+        <th scope="col" style="text-align: center">Actions</th>
+      </tr>
+     </ng-template>
+    <!-- Le contenu -->
+    <ng-template pTemplate="body" let-candidatures let-index="rowIndex"
+      > 
+      <tr>
+        <td style="text-align: center">
+         {{ candidatures.candidat.lastName | titlecase }}
+        </td>
+         
+        <td style="text-align: center">
+        {{ candidatures.candidat.firstName | titlecase }}
+        </td>
+         
+        <td style="text-align: center">
+             {{ candidatures.candidat.email | lowercase }}
+        </td>
+         
+        <td style="text-align: center">
+         {{ candidatures.datePostule | date }} 
+        </td>
+        <td style="text-align: center">
+             {{ candidatures.status }} 
+        </td>
+         
+        <td style="text-align: center">
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(candidatures)"></button>
+        </td>
+        
+      </tr>
+       </ng-template
+    >
+    <ng-template pTemplate="emptymessage"
+      > 
+      <tr>
+         
+        <td colspan="5">Pas de ressource trouvée.</td>
+         
+      </tr>
+       </ng-template
+    >
+    <ng-template pTemplate="summary"
+      > 
+      <div
+        class="p-d-flex p-ai-center p-jc-between"
+        style="font-size: 1rem; font-weight: normal"
+      >
+          Au total, il y a {{ [] ? [].length : 0 }} cursus.
+        
+      </div>
+       </ng-template
+    >
+  </p-table>
+</div>
+<p-dialog [(visible)]="productDialog" [style]="{width: '31vw'}" [breakpoints]="{'960px': '90vw', '640px': '80vw'}" [header]="header" [modal]="true" styleClass="p-fluid">
+        <p-timeline [value]="events1" align="alternate" styleClass="customized-timeline">
+            <ng-template pTemplate="marker" let-event>
+                <span class="custom-marker shadow-2" [style.backgroundColor]="event.color">
+                    <i [ngClass]="event.icon"></i>
+                </span>
+            </ng-template>
+            <ng-template pTemplate="content" let-event>
+                <p-card [header]="event.status" [subheader]="event.date">
+                </p-card>
+            </ng-template>
+        </p-timeline>
+
+</p-dialog>

@@ -1,0 +1,401 @@
+<div class="card" style="padding: 2em; box-sizing: border-box">
+
+    <!-- <h2 style="margin-top: 30px; color: #6c757d;">Session : {{session}}</h2> -->
+    <div class="title">
+        <h1 style="font-size: 1.7rem; text-align: center" s>Session : {{session}}</h1>
+    </div>
+
+    <!-- Tableau Dynamique -->
+    <p-tabView [style.pointer-events]="!displayComments ? 'auto' : 'none'">
+
+        <!-- Apprentis -->
+        <p-tabPanel header="Liste des apprentis">
+            <p-table #dt2 [value]="sessionStudents" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[10,20,30]" [loading]="loading" [paginator]="true"
+                currentPageReportTemplate="{first} à {last} de {totalRecords} Apprentis"
+                [globalFilterFields]="['firstname','lastname','nbrJocker','score','countReviews']"
+                responsiveLayout="scroll">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex">
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input [(ngModel)]="searchStudents" pInputText type="text"
+                                (input)="dt2.filterGlobal(searchStudents,'contains')" placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between" style="font-size: 1rem; font-weight: normal;">
+                        Au total, il y a {{sessionStudents ? sessionStudents.length : 0 }} {{sessionStudents.length > 1
+                        ? "apprentis" : "apprenti"}} .
+                    </div>
+                </ng-template>
+                <ng-template #myTemplate pTemplate="header">
+                    <tr [style]="{ width: 'auto !important' }">
+                        <th scope="col">Nom et Prénom</th>
+                        <th scope="col">Jokers</th>
+                        <th scope="col">Mission</th>
+                        <th scope="col">Communauté</th>
+                        <th scope="col">Score </th>
+                        <th scope="col">Evaluation</th>
+                        <th scope="col">Repo Git</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-sessionStudents>
+                    <tr>
+                        <td style="display: flex;">
+                            <img src="assets/user.jpg" style="width: 75px; border-radius: 35px;" alt="">
+                            <div style=" padding-left: 30px;">
+                                <p style="margin: 0 0 7px 0;">{{sessionStudents.firstname}} {{sessionStudents.lastname}}
+                                </p>
+                                <p class="status">{{sessionStudents.status}}</p>
+                            </div>
+                        </td>
+                        <td>
+                            <!-- {{sessionStudents.nbrJocker}} -->
+                            <div style="display: flex;">
+                                <div *ngFor="let i of [].constructor(sessionStudents.nbrJocker)">
+                                    <!-- <button pButton pRipple type="button" icon="pi pi-heart-fill"
+                                        class="p-button-rounded p-button-help p-button-text"></button> -->
+                                    <i class="pi pi-heart-fill"
+                                        style="font-size: 1rem; padding-right: 5px;cursor: pointer; color:#3B82F6;"></i>
+                                </div>
+                                <div
+                                    *ngFor="let i of [].constructor(sessionStudents.nbrJockerTotal-sessionStudents.nbrJocker)">
+                                    <!-- <button pButton pRipple type="button" icon="pi pi-heart"
+                                        class="p-button-rounded p-button-help p-button-text"></button> -->
+                                    <i class="pi pi-heart"
+                                        style="font-size: 1rem; padding-right: 5px;cursor: pointer; color:#3B82F6;"></i>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div *ngIf="sessionStudents.mission">
+                                <em class="pi pi-check" Style="color: green; font-size: 2rem; cursor: pointer"
+                                    (click)="changeColor()"></em>
+                            </div>
+                            <div *ngIf="!sessionStudents.mission">
+                                <em class="pi pi-times" Style="color: red; font-size: 2rem; cursor: pointer"
+                                    (click)="changeColor()"></em>
+                            </div>
+                        </td>
+                        <td class="emoji">
+                            <div>
+                                <!-- <div style="margin-top: 7px;">
+                                    <p-dropdown [options]="notes" [appendTo]="'body'" [(ngModel)]=selectedNote
+                                        (ngModelChange)="onNoteSelect($event)" placeholder="Selectionner un niveau"
+                                        optionLabel="name" [showClear]="false"></p-dropdown>
+                                </div> -->
+                                <div>
+                                    <img src="assets/smiley/smiley-1.png" *ngIf='sessionStudents.interaction==1'
+                                        (mouseenter)="showEmojis(sessionStudents.id)"
+                                        style="margin-left: 15px; cursor: pointer; width: 35px; border-radius: 25%;"
+                                        alt="">
+                                    <img src="assets/smiley/smiley-2.png" *ngIf='sessionStudents.interaction==2'
+                                        (mouseenter)="showEmojis(sessionStudents.id)"
+                                        style="margin-left: 15px; cursor: pointer; width: 35px; border-radius: 25%;"
+                                        alt="">
+                                    <img src="assets/smiley/smiley-3.png" *ngIf='sessionStudents.interaction==3'
+                                        (mouseenter)="showEmojis(sessionStudents.id)"
+                                        style="margin-left: 15px; cursor: pointer; width: 35px; border-radius: 25%;"
+                                        alt="">
+                                    <img src="assets/smiley/smiley-4.png" *ngIf='sessionStudents.interaction==4'
+                                        (mouseenter)="showEmojis(sessionStudents.id)"
+                                        style="margin-left: 15px; cursor: pointer; width: 35px; border-radius: 25%;"
+                                        alt="">
+
+                                    <!-- <angular-emojis class="emoji" *ngIf='sessionStudents.interaction==1'
+                                        (mouseenter)="showEmojis(sessionStudents.id)"
+                                        style="margin-left: 15px; cursor: pointer" name="confused" size="40">
+                                    </angular-emojis>
+                                    <angular-emojis class="emoji" *ngIf='sessionStudents.interaction==2'
+                                        (mouseenter)="showEmojis(sessionStudents.id)"
+                                        style="margin-left: 15px; cursor: pointer" name="smiley" size="40">
+                                    </angular-emojis>
+                                    <angular-emojis class="emoji" *ngIf='sessionStudents.interaction==3'
+                                        (mouseenter)="showEmojis(sessionStudents.id)"
+                                        style="margin-left: 15px; cursor: pointer" name="smile" size="40">
+                                    </angular-emojis>
+                                    <angular-emojis class="emoji" *ngIf='sessionStudents.interaction==4'
+                                        (mouseenter)="showEmojis(sessionStudents.id)"
+                                        style="margin-left: 15px; cursor: pointer" name="sunglasses" size="40">
+                                    </angular-emojis> -->
+
+                                </div>
+                                <div>
+                                    <span>
+                                        <p-dialog
+                                            [(visible)]="displayEmojis && [(sessionIdToCheck)]==sessionStudents.id"
+                                            [closable]="false" (mouseleave)="displayEmojis=false">
+                                            <div style="display: flex;">
+                                                <img src="assets/smiley/smiley-1.png"
+                                                    style="margin-left: 5px; cursor: pointer; width: 35px; border-radius: 25%;"
+                                                    alt="">
+                                                <img src="assets/smiley/smiley-2.png"
+                                                    style="margin-left: 15px; cursor: pointer; width: 35px; border-radius: 25%;"
+                                                    alt="">
+                                                <img src="assets/smiley/smiley-3.png"
+                                                    style="margin-left: 15px; cursor: pointer; width: 35px; border-radius: 25%;"
+                                                    alt="">
+                                                <img src="assets/smiley/smiley-4.png"
+                                                    style="margin-left: 15px; cursor: pointer; width: 35px; border-radius: 25%;"
+                                                    alt="">
+
+                                                <!-- <angular-emojis style="margin-left: 1px; cursor: pointer"
+                                                    name="confused" size="40">
+                                                </angular-emojis>
+                                                <angular-emojis style="margin-left: 1px; cursor: pointer" name="smiley"
+                                                    size="40">
+                                                </angular-emojis>
+                                                <angular-emojis style="margin-left: 1px; cursor: pointer" name="smile"
+                                                    size="40">
+                                                </angular-emojis>
+                                                <angular-emojis style="margin-left: 1px; cursor: pointer"
+                                                    name="sunglasses" size="40">
+                                                </angular-emojis> -->
+                                            </div>
+                                        </p-dialog>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {{sessionStudents.score}} %
+                        </td>
+                        <td style="min-width: 10.75rem;">
+                            <!-- {{sessionStudents.countReviews}} -->
+                            <p-rating [ngModel]="sessionStudents.avgReviews" [readonly]="true" [stars]="5"
+                                [cancel]="false"></p-rating>
+                        </td>
+                        <td>
+                            <div style="display: flex;">
+                                <!-- <button pButton pRipple type="button" icon="pi pi-user" class="p-button-rounded p-button-outlined" style="margin-right: 15px;"></button> -->
+                                <!-- <button pButton pRipple type="button" icon="pi pi-calculator"class="p-button-rounded p-button-outlined" style="margin-right: 15px;"></button> -->
+                                <button pButton pRipple type="button" icon="pi pi-github"
+                                    class="p-button-rounded p-button-outlined"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="5">Pas de ressource trouvée.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+
+        <!-- Validations -->
+        <p-tabPanel header="Validations">
+            <p-table #dt3 [value]="sessionValidations" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[10,20,30]" [loading]="loading" [paginator]="true"
+                currentPageReportTemplate="{first} à {last} de {totalRecords} Validations"
+                [globalFilterFields]="['course','module','date','score']" responsiveLayout="scroll">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex">
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input [(ngModel)]="searchValidations" pInputText type="text"
+                                (input)="dt3.filterGlobal(searchValidations,'contains')" placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between" style="font-size: 1rem; font-weight: normal;">
+                        Au total, il y a {{sessionValidations ? sessionValidations.length : 0 }}
+                        {{sessionValidations.length > 1 ? "validations" : "validation"}}.
+                    </div>
+                </ng-template>
+                <ng-template #myTemplate pTemplate="header">
+                    <tr [style]="{ width: 'auto !important' }">
+                        <th scope="col">Leçon</th>
+                        <th scope="col">Module</th>
+                        <th scope="col">Date </th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Détails</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-sessionValidations>
+                    <tr>
+                        <td>
+                            {{sessionValidations.course}}
+                        </td>
+                        <td>
+                            {{sessionValidations.module}}
+                        <td>
+                            {{sessionValidations.date}}
+                        </td>
+                        <td>
+                            {{sessionValidations.score}} %
+                        </td>
+                        <td>
+                            -----
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="5">Pas de ressource trouvée.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+
+        <!-- Evaluations -->
+        <p-tabPanel header="Evaluations">
+            <p-table #dt4 [value]="sessionEvaluations" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[10,20,30]" [loading]="loading" [paginator]="true"
+                currentPageReportTemplate="{first} à {last} de {totalRecords} Evaluations"
+                [globalFilterFields]="['course','module','ratingDetails.avg']" responsiveLayout="scroll">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex">
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input [(ngModel)]="searchEvaluations" pInputText type="text"
+                                (input)="dt4.filterGlobal(searchEvaluations,'contains')" placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="p-d-flex p-ai-center p-jc-between" style="font-size: 1rem; font-weight: normal;">
+                        Au total, il y a {{sessionEvaluations ? sessionEvaluations.length : 0 }}
+                        {{sessionEvaluations.length > 1 ? "évaluations" : "évaluation"}}.
+                    </div>
+                </ng-template>
+                <ng-template #myTemplate pTemplate="header">
+                    <tr [style]="{ width: 'auto !important' }">
+                        <th scope="col">Leçon</th>
+                        <th scope="col">Module</th>
+                        <th scope="col">Evaluation </th>
+                        <th scope="col">Commentaires</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-sessionEvaluations>
+                    <tr>
+                        <td>
+                            {{sessionEvaluations.course}}
+                        </td>
+                        <td>
+                            {{sessionEvaluations.module}}
+                        <td style="min-width: 13.5rem; display: flex;" (mouseleave)="hideRates()">
+                            <!-- {{sessionEvaluations.ratingDetails.avg}} -->
+                            <p-dialog header="Détails : "
+                                [(visible)]="displayRates && [(evaluationIdToCheck)]==sessionEvaluations.id"
+                                [closable]="false">
+
+                                <div style="display: flex;">
+                                    <p-rating [ngModel]="val5" [readonly]="true" [stars]="5" [cancel]="false"
+                                        style="min-width: 9em;"></p-rating>
+                                    <p style="padding-left: 1.5em; margin-top: 0;">
+                                        {{sessionEvaluations.ratingDetails.stars["5"]}} votes</p>
+                                </div>
+                                <div style="display: flex;">
+                                    <p-rating [ngModel]="val4" [readonly]="true" [stars]="5" [cancel]="false"
+                                        style="min-width: 9em;"></p-rating>
+                                    <p style="padding-left: 1.5em; margin-top: 0;">
+                                        {{sessionEvaluations.ratingDetails.stars["4"]}} votes</p>
+                                </div>
+                                <div style="display: flex;">
+                                    <p-rating [ngModel]="val3" [readonly]="true" [stars]="5" [cancel]="false"
+                                        style="min-width: 9em;"></p-rating>
+                                    <p style="padding-left: 1.5em; margin-top: 0;">
+                                        {{sessionEvaluations.ratingDetails.stars["3"]}} votes</p>
+                                </div>
+                                <div style="display: flex;">
+                                    <p-rating [ngModel]="val2" [readonly]="true" [stars]="5" [cancel]="false"
+                                        style="min-width: 9em;"></p-rating>
+                                    <p style="padding-left: 1.5em; margin-top: 0;">
+                                        {{sessionEvaluations.ratingDetails.stars["2"]}} votes</p>
+                                </div>
+                                <div style="display: flex;">
+                                    <p-rating [ngModel]="val1" [readonly]="true" [stars]="5" [cancel]="false"
+                                        style="min-width: 9em;"></p-rating>
+                                    <p style="padding-left: 1.5em; margin-top: 0;">
+                                        {{sessionEvaluations.ratingDetails.stars["1"]}} votes</p>
+                                </div>
+
+                            </p-dialog>
+                            <div>
+                                <p-rating [ngModel]="sessionEvaluations.ratingDetails.avg"
+                                    (mouseenter)="showRates(sessionEvaluations.id)" [readonly]="true" [stars]="5"
+                                    [cancel]="false"></p-rating>
+                                <div style="margin-top: 10px;text-align: center;">(
+                                    {{sessionEvaluations.ratingDetails.totalVoters}} votes )</div>
+                            </div>
+                            <!-- <div>
+                                <div *ngIf="sessionEvaluations.ratingDetails.avg === 1">
+                                    <div>
+                                        <img src="assets/emojis/angry.svg" alt="angry" height="30px"
+                                            style=" margin-left: 15px" />
+                                    </div>
+                                </div>
+                                <div *ngIf="sessionEvaluations.ratingDetails.avg === 2">
+                                    <div>
+                                        <img src="assets/emojis/frown.svg" alt="frown" height="30px"
+                                            style="margin-left: 15px" />
+                                    </div>
+                                </div>
+                                <div *ngIf="sessionEvaluations.ratingDetails.avg === 3">
+                                    <div>
+                                        <img src="assets/emojis/meh-face-emoticon.svg" alt="meh-face-emoticon"
+                                            height="30px" style="margin-left: 15px" />
+                                    </div>
+                                </div>
+                                <div *ngIf="sessionEvaluations.ratingDetails.avg === 4">
+                                    <div>
+                                        <img src="assets/emojis/smile.svg" alt="smile" height="30px"
+                                            style="margin-left: 15px" />
+                                    </div>
+                                </div>
+                                <div *ngIf="sessionEvaluations.ratingDetails.avg === 5">
+                                    <div>
+                                        <img src="assets/emojis/emoticon-hearts.svg" alt="emoticon-hearts" height="30px"
+                                            style="margin-left: 15px" />
+                                    </div>
+                                </div>
+                            </div> -->
+                        </td>
+                        <td>
+                            <!-- {{sessionEvaluations.comments}} -->
+                            <i class="pi pi-comments" style="cursor: pointer;"
+                                (click)="showComments(sessionEvaluations.course)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="5">Pas de ressource trouvée.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+    </p-tabView>
+
+    <!-- Dialogue de commentaires -->
+    <p-dialog header="Commentaires :" [(visible)]="displayComments">
+        <div style="min-width:250px; min-height: 250px;">
+            <div *ngIf="commentairesExist">
+                <ol>
+                    <div *ngFor="let c of commentaires">
+                        <!-- <p>{{c.comments}}</p> -->
+                        <li style="padding-left: 5px; margin-top: 15px;"> {{c}}</li>
+                    </div>
+                </ol>
+                <!-- <p>{{sessionComments.comment}}</p> -->
+            </div>
+            <div *ngIf="!commentairesExist">
+                <p>Pas de commentaires</p>
+            </div>
+        </div>
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-times" (click)="displayComments=false" label="Fermer"></p-button>
+        </ng-template>
+    </p-dialog>
+
+</div>

@@ -1,0 +1,194 @@
+<div class="card" style="padding: 2em; box-sizing: border-box">
+    <div class="title">
+        <h1 style="font-size: 1.7rem; text-align: center" s>Gestion des leçons : [Titre de la leçon]</h1>
+    </div>
+    <p-tabView>
+<!-- first panel : Synopsis -->
+        <p-tabPanel header="Synopsis">
+          <angular-editor spellcheck-language="fr" style="margin-top: 0.2rem;" [placeholder]="'Entrer la synopsis...'" [(ngModel)]="lesson.synopsis"></angular-editor>
+          <button
+            pButton
+            pRipple
+            label="Enregistrer"
+            class="p-button-success mr-2" style="margin-top: 10px; margin-bottom: 10px;"></button>
+        </p-tabPanel>
+
+<!-- second panel : Ressources -->
+        <p-tabPanel header="Ressources">
+          <div class="header">
+            <button
+          pButton
+          pRipple
+          label="Ajouter"
+          icon="pi pi-plus"
+          class="p-button-success mr-2"
+          (click)="addRessource()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Exporter"
+          icon="pi pi-upload"
+          class="p-button-success mr-2"
+        ></button>
+        </div>
+          
+        
+        <div class="resource flex align-items-center" style="height: 35px" *ngFor="let resource of lesson.ressources; let i = index">
+          <em class="pi pi-pencil small-button" style=" cursor : pointer" title="Modifier" (click)="editRessource(resource, i)"></em> 
+          
+          <em class="pi pi-trash small-button" style=" cursor : pointer" title="Supprimer" (click)="deleteRessource($event,i)"></em>
+          <p-toast></p-toast>
+          <p-confirmPopup ></p-confirmPopup>
+          <a href="{{ resource.url }}" style="color: #6c757d;" target="_blank" rel="noopener">
+              <p style="margin-left: 17px">{{ resource.title }}</p>
+          </a>
+          
+      </div>
+        </p-tabPanel>
+
+<!-- third panel : Activities -->
+        <p-tabPanel header="Activités">
+          <div class="header">
+            <button
+          pButton
+          pRipple
+          label="Ajouter"
+          icon="pi pi-plus"
+          class="p-button-success mr-2"
+          (click)="addActivity()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Exporter"
+          icon="pi pi-upload"
+          class="p-button-success mr-2"
+        ></button>
+
+        </div>
+          <p-accordion [multiple]="true" >
+              <p-accordionTab  *ngFor="let activity of lesson.activities; let i = index" >
+                <ng-template pTemplate="header" >
+                  <em class="pi pi-pencil small-button" style=" cursor : pointer" title="Modifier" (click)="$event.stopPropagation();editActivity(activity, i) "></em> 
+                  <em class="pi pi-trash small-button" style=" cursor : pointer" title="Supprimer" (click)="$event.stopPropagation();deleteActivity($event,i)"></em>
+          <p-toast></p-toast>
+          <p-confirmPopup ></p-confirmPopup>
+                  <span style="padding-left: 15px;" >{{activity.title}}</span>
+                </ng-template>
+                <angular-editor spellcheck-language="fr" [placeholder]="'Entrer le contenu ...'" [(ngModel)]="activity.content"></angular-editor>
+                <button
+            pButton
+            pRipple
+            label="Enregistrer"
+            class="p-button-success mr-2" style="margin-top: 10px; margin-bottom: 10px;"></button>
+                
+              </p-accordionTab>
+          </p-accordion>
+        </p-tabPanel>
+
+        
+    </p-tabView>
+</div>
+
+<!-- dilogue d'ajout' des activités -->
+<p-dialog [(visible)]="activityDialog" [style]="{width: '450px'}" header="Ajouter une activité" [modal]="true" styleClass="p-fluid" (onHide)="hideActivityDialog()">
+  <ng-template pTemplate="content">
+    <form [formGroup]="activityForm">
+        <div class="field">
+            <label for="title">Titre</label>
+            <input type="text" pInputText id="title" required [ngClass]="{'ng-invalid ng-dirty': (activityForm.controls['title'].hasError('required')) && activityForm.controls['title'].touched}" formControlName="title" />
+            <small *ngIf="activityForm.controls['title'].hasError('required') && activityForm.controls['title'].touched" class="p-error block">Proposer le titre de l'activité.</small>
+            <small *ngIf="activityForm.get('title')?.hasError('minlength')" class="p-error block">Le titre doit
+comporter 3 caractères au minimum.</small>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template pTemplate="footer">
+    <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideActivityDialog()"></button>
+    <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" [disabled]="activityForm.invalid" (click)="saveActivity()"></button>
+</ng-template>
+</p-dialog>
+
+<!-- dilogue d'ajout des ressources -->
+<p-dialog [(visible)]="ressourceDialog" [style]="{width: '450px'}" header="Ajouter une ressource" [modal]="true" styleClass="p-fluid" (onHide)="hideRessourceDialog()">
+  <ng-template pTemplate="content">
+    <form [formGroup]="ressourceForm">
+        <div class="field">
+            <label for="title">Titre</label>
+            <input type="text" pInputText id="title" required [ngClass]="{'ng-invalid ng-dirty': (ressourceForm.controls['title'].hasError('required')) && ressourceForm.controls['title'].touched}" formControlName="title" />
+            <small *ngIf="ressourceForm.controls['title'].hasError('required') && ressourceForm.controls['title'].touched" class="p-error block">Proposer le titre de la ressource.</small>
+            <small *ngIf="ressourceForm.get('title')?.hasError('minlength')" class="p-error block">Le titre doit
+comporter 3 caractères au minimum.</small>
+        </div>
+
+        <div class="p-formgrid p-grid" style="margin-bottom: 15px;">
+            <div class="field">
+                <label for="url">Lien</label>
+                <input type="text" pInputText id="url" required [ngClass]="{'ng-invalid ng-dirty': (ressourceForm.controls['url'].hasError('required')) && ressourceForm.controls['url'].touched}" formControlName="url" />
+                <small *ngIf="ressourceForm.controls['url'].hasError('required') && ressourceForm.controls['url'].touched" class="p-error block">Proposer l'URL de la ressource.</small>
+                <small *ngIf="ressourceForm.get('url')?.hasError('pattern')" class="p-error block">Proposer une URL valide</small>
+            </div>
+
+        </div>
+    </form>
+</ng-template>
+
+<ng-template pTemplate="footer">
+    <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideRessourceDialog()"></button>
+    <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" [disabled]="ressourceForm.invalid" (click)="saveRessource()"></button>
+</ng-template>
+</p-dialog>
+
+
+
+<!-- dilogue de modification des ressources -->
+<p-dialog [(visible)]="editRessourceDialog" [style]="{width: '450px'}" header="Modifier une ressource" [modal]="true" styleClass="p-fluid" (onHide)="hideEditRessourceDialog()">
+  <ng-template pTemplate="content">
+    <form [formGroup]="ressourceForm">
+        <div class="field">
+            <label for="title">Titre</label>
+            <input type="text" pInputText id="title" required [ngClass]="{'ng-invalid ng-dirty': (ressourceForm.controls['title'].hasError('required')) && ressourceForm.controls['title'].touched}" formControlName="title" />
+            <small *ngIf="ressourceForm.controls['title'].hasError('required') && ressourceForm.controls['title'].touched" class="p-error block">Proposer le titre de la ressource.</small>
+            <small *ngIf="ressourceForm.get('title')?.hasError('minlength')" class="p-error block">Le titre doit
+comporter 3 caractères au minimum.</small>
+        </div>
+
+        <div class="p-formgrid p-grid" style="margin-bottom: 15px;">
+            <div class="field">
+                <label for="url">Lien</label>
+                <input type="text" pInputText id="url" required [ngClass]="{'ng-invalid ng-dirty': (ressourceForm.controls['url'].hasError('required')) && ressourceForm.controls['url'].touched}" formControlName="url" />
+                <small *ngIf="ressourceForm.controls['url'].hasError('required') && ressourceForm.controls['url'].touched" class="p-error block">Proposer l'URL de la ressource.</small>
+                <small *ngIf="ressourceForm.get('url')?.hasError('pattern')" class="p-error block">Proposer une URL valide</small>
+            </div>
+
+        </div>
+    </form>
+</ng-template>
+
+<ng-template pTemplate="footer">
+    <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideEditRessourceDialog()"></button>
+    <button pButton pRipple label="Confirmer" icon="pi pi-check" class="p-button-text" [disabled]="!modified || ressourceForm.invalid" (click)="saveEditRessource()"></button>
+</ng-template>
+</p-dialog>
+
+<!-- dilogue de modification des activités -->
+<p-dialog [(visible)]="editActivityDialog" [style]="{width: '450px'}" header="Modifier une activité" [modal]="true" styleClass="p-fluid" (onHide)="hideEditActivityDialog()">
+  <ng-template pTemplate="content">
+    <form [formGroup]="activityForm">
+        <div class="field">
+            <label for="title">Titre</label>
+            <input type="text" pInputText id="title" required [ngClass]="{'ng-invalid ng-dirty': (activityForm.controls['title'].hasError('required')) && activityForm.controls['title'].touched}" formControlName="title" />
+            <small *ngIf="activityForm.controls['title'].hasError('required') && activityForm.controls['title'].touched" class="p-error block">Proposer le titre de l'activité.</small>
+            <small *ngIf="activityForm.get('title')?.hasError('minlength')" class="p-error block">Le titre doit
+comporter 3 caractères au minimum.</small>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template pTemplate="footer">
+    <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideEditActivityDialog()"></button>
+    <button pButton pRipple label="Confirmer" icon="pi pi-check" class="p-button-text" [disabled]="!modified || activityForm.invalid" (click)="saveEditActivity()"></button>
+</ng-template>
+</p-dialog>

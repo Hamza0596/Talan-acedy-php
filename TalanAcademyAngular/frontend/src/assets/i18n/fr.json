@@ -1,0 +1,53 @@
+{
+  "primeng": {
+    "clear": "Effacer",
+    "apply": "Appliquer",
+    "dayNames": [
+      "Dimanche",
+      "Lundi",
+      "Mardi",
+      "Mercredi",
+      "Jeudi",
+      "Vendredi",
+      "Samedi"
+    ],
+    "matchAll": "Matcher tout",
+    "matchAny": "Match Any",
+    "addRule": "Ajouter une règle",
+    "dayNamesShort": ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+    "dayNamesMin": ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"],
+    "monthNames": [
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre"
+    ],
+    "monthNamesShort": [
+      "Janv.",
+      "Févr.",
+      "Mars",
+      "Avr.",
+      "Mai",
+      "Juin",
+      "Juil.",
+      "Août",
+      "Sept.",
+      "Oct.",
+      "Nov.",
+      "Déc."
+    ],
+    "dateIs": "la date est égale à",
+    "dateIsNot": "la date est différente de",
+    "dateBefore": "la date est avant",
+    "dateAfter": "la date est après",
+    "dateFormat": "dd/mm/yy"
+  }
+}

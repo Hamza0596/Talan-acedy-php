@@ -1,0 +1,607 @@
+<div class="profile-header">
+  <div class="profile-header-img">
+    <p-avatar
+      pTooltip="Mon profil"
+      tooltipPosition="right"
+      (click)="profile()"
+      *ngIf="!profileImageExist"
+      [style]="{
+        cursor: 'pointer',
+        width: '6rem',
+        height: '6rem',
+        'font-size': '2.7rem'
+      }"
+      class="inline-flex"
+      [label]="user.firstName![0] + user.lastName![0]"
+      size="small"
+      shape="circle"
+    ></p-avatar>
+    <p-avatar
+      pTooltip="Mon profil"
+      tooltipPosition="right"
+      (click)="profile()"
+      *ngIf="profileImageExist"
+      [style]="{
+        cursor: 'pointer',
+        width: '6rem',
+        height: '6rem',
+        'font-size': '2.7rem'
+      }"
+      class="inline-flex"
+      [image]="imageToShow"
+      size="small"
+      shape="circle"
+    ></p-avatar>
+  </div>
+
+  <div
+    class="profile-header-info"
+    style="
+      display: flex;
+      color: white;
+      justify-content: space-between;
+      align-items: center;
+    "
+  >
+    <h2 style="color: white">
+      <strong>{{ user.firstName[0].toUpperCase() }}</strong
+      >{{ user.firstName.slice(1) }}&nbsp;
+
+      <strong>{{ user.lastName[0].toUpperCase() }}</strong
+      >{{ user.lastName.slice(1) }}
+    </h2>
+
+    <button
+      (click)="profile()"
+      style="
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        border: none;
+        background-color: #006dbf;
+        color: white;
+        font-size: 0.9rem;
+      "
+    >
+      <em
+        class="pi pi-user-edit"
+        style="font-size: 1rem; margin-right: 0.5rem; color: white"
+      ></em>
+      <p class="edit" style="color: white">Éditer mon Profil</p>
+    </button>
+  </div>
+</div>
+
+<div class="dashboard">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div id="content" class="content content-full-width">
+          <div class="cards" style="margin-top: 150px" *ngIf="dashboardInfo">
+            <div class="card">
+              <div
+                class="flex-row flex-wrap card-container blue-container"
+                style="justify-content: center; align-items: center"
+              >
+                <p-card [style]="{ height: '12rem', width: '15rem' }">
+                  <ng-template
+                    pTemplate="header"
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <div
+                      style="
+                        border-bottom: 1px solid #ccc;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      "
+                    >
+                      <h6
+                        style="
+                          display: flex;
+                          justify-content: flex-start;
+                          padding-left: 10px;
+                          align-items: center;
+                          height: 3px;
+                          border-bottom: #006dbf;
+                          border-width: 10px;
+                          font-size: medium;
+                          font-weight: bold;
+                          color: #006dbf;
+                          margin-top: 10px;
+                          padding-top: 20px;
+                          width: 100%;
+                        "
+                      >
+                        Session
+                      </h6>
+                    </div>
+                  </ng-template>
+                  <div style="margin-top: 0%">
+                    <p>
+                      <strong>Session: </strong>
+
+                      {{ dashboardInfo.sessionName }}
+                    </p>
+                    <p>
+                      <strong>Progression: </strong>
+                      {{ dashboardInfo.progress | number : "1.0-0" }}%
+                    </p>
+                    <p>
+                      <strong>{{ dashboardInfo.nbSessionModule }}</strong>
+                      Modules&nbsp;
+                      <strong>{{ dashboardInfo.nbSessionDay }}</strong>
+                      Leçons
+                    </p>
+                  </div>
+                </p-card>
+              </div>
+            </div>
+            <div class="card">
+              <div
+                class="flex-row flex-wrap card-container blue-container"
+                style="justify-content: center; align-items: center"
+              >
+                <p-card [style]="{ height: '12rem', width: '18rem' }">
+                  <ng-template
+                    pTemplate="header"
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <div
+                      style="
+                        border-bottom: 1px solid #ccc;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      "
+                    >
+                      <h6
+                        style="
+                          display: flex;
+                          justify-content: flex-start;
+                          padding-left: 10px;
+                          align-items: center;
+                          height: 3px;
+                          border-bottom: #006dbf;
+                          border-width: 10px;
+                          font-size: medium;
+                          font-weight: bold;
+                          color: #006dbf;
+                          margin-top: 10px;
+                          padding-top: 20px;
+                          width: 100%;
+                        "
+                      >
+                        Bilan
+                      </h6>
+                      <em
+                        class="pi pi-chart-line"
+                        style="
+                          font-size: 1.2rem;
+                          color: #006dbf;
+                          padding-right: 8px;
+                        "
+                      ></em>
+                    </div>
+                  </ng-template>
+
+                  <canvas id="myChart"></canvas>
+                </p-card>
+              </div>
+            </div>
+            <div class="card">
+              <div
+                class="flex-row flex-wrap card-container blue-container"
+                style="justify-content: center; align-items: center"
+              >
+                <p-card [style]="{ height: '12rem', width: '15rem' }">
+                  <ng-template
+                    pTemplate="header"
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <div
+                      style="
+                        border-bottom: 1px solid #ccc;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      "
+                    >
+                      <h6
+                        style="
+                          display: flex;
+                          justify-content: flex-start;
+                          padding-left: 10px;
+                          align-items: center;
+                          height: 3px;
+                          border-bottom: #006dbf;
+                          border-width: 10px;
+                          font-size: medium;
+                          font-weight: bold;
+                          color: #006dbf;
+                          margin-top: 10px;
+                          padding-top: 20px;
+                          width: 100%;
+                        "
+                      >
+                        Stats
+                      </h6>
+                      <em
+                        class="pi pi-chart-bar"
+                        style="
+                          font-size: 1.2rem;
+                          color: #006dbf;
+                          padding-right: 8px;
+                        "
+                      ></em>
+                    </div>
+                  </ng-template>
+                  <div style="margin-top: 0%">
+                    <p>
+                      <strong>Score: </strong>
+
+                      {{ dashboardInfo.average }} %
+                    </p>
+                    <div style="display: flex">
+                      <p>
+                        <strong>Jokers: </strong>
+                        {{ dashboardInfo.nbrJoker }}
+                      </p>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <div
+                        style="
+                          display: flex;
+                          justify-content: flex-start;
+                          align-items: center;
+                        "
+                        *ngFor="
+                          let i of [].constructor(dashboardInfo.nbrJokerTotal);
+                          let j = index
+                        "
+                      >
+                        <div>
+                          <em
+                            class="pi pi-heart-fill"
+                            style="font-size: 1.5rem; color: red"
+                            *ngIf="j < dashboardInfo.nbrJoker"
+                          ></em>
+                        </div>
+                        <div class="flex align-items-center">
+                          <em
+                            class="pi pi-heart"
+                            style="font-size: 1.5rem; color: red"
+                            *ngIf="j >= dashboardInfo.nbrJoker"
+                          ></em>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </p-card>
+              </div>
+            </div>
+            <div class="card">
+              <div
+                class="flex-row flex-wrap card-container blue-container"
+                style="justify-content: center; align-items: center"
+              >
+                <p-card [style]="{ height: '12rem', width: '15rem' }">
+                  <ng-template
+                    pTemplate="header"
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    <div
+                      style="
+                        border-bottom: 1px solid #ccc;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      "
+                    >
+                      <h6
+                        style="
+                          display: flex;
+                          justify-content: flex-start;
+                          padding-left: 10px;
+                          align-items: center;
+                          height: 3px;
+                          border-bottom: #006dbf;
+                          border-width: 10px;
+                          font-size: medium;
+                          font-weight: bold;
+                          color: #006dbf;
+                          margin-top: 10px;
+                          padding-top: 20px;
+                          width: 100%;
+                        "
+                      >
+                        Communauté
+                      </h6>
+                      <em
+                        class="pi pi-slack"
+                        style="
+                          font-size: 1.2rem;
+                          color: #006dbf;
+                          padding-right: 8px;
+                        "
+                      ></em>
+                    </div>
+                  </ng-template>
+                  <div style="margin-top: 0%">
+                    <p>
+                      <strong>Mission: </strong>
+
+                      <ng-container *ngIf="dashboardInfo.mission == true">
+                        <em class="fas fa-check text-success"></em>
+                      </ng-container>
+                      <ng-container *ngIf="dashboardInfo.mission == false">
+                        <em class="fas fa-times text-danger"></em>
+                      </ng-container>
+                    </p>
+
+                    <p>
+                      <strong>Ressources proposées: </strong>
+                      {{ dashboardInfo.nbrPrposedResources }}
+                    </p>
+                    <p>
+                      <strong>Jours évalués: </strong>
+                      {{ dashboardInfo.nbrDaysUserEvaluation }}/{{
+                        dashboardInfo.nbrDayPassedTotal
+                      }}
+                    </p>
+                  </div>
+                </p-card>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!dashboardInfo" style="height: 341px">
+            <i
+              class="pi pi-spin pi-spinner"
+              style="font-size: 6rem; margin-top: 150px; color: #006dbf"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cardT">
+  <p-table
+    #datatable
+    #dt1
+    [value]="allCorrections"
+    dataKey="module"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 15, 20]"
+    class="p-datatable-customers"
+    [paginator]="true"
+    [globalFilterFields]="['module']"
+    currentPageReportTemplate="{first} à {last} de {totalRecords} corrections"
+    template
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="caption">
+      <div>
+        <h2>Mes corrections</h2>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr [style]="{ width: 'auto !important' }">
+        <th scope="col">
+          Module
+          <p-columnFilter
+            field="module"
+            matchMode="in"
+            display="menu"
+            [showMatchModes]="false"
+            [showOperator]="false"
+            [showAddButton]="false"
+            (click)="Buttons()"
+          >
+            <ng-template
+              pTemplate="filter"
+              let-value
+              let-filter="filterCallback"
+            >
+              <p-multiSelect
+                [options]="filterModule"
+                [ngModel]="value"
+                optionLabel="name"
+                optionValue="value"
+                placeholder="Module"
+                (onChange)="filter($event.value)"
+              >
+                <ng-template let-option pTemplate="item" style="width: 50px">
+                  <div style="width: 23vh">
+                    <span style="font-size: 14px;padding: 0rem 0rem;">{{ option.name }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th scope="col">Cours</th>
+        <th scope="col">Score</th>
+        <th scope="col">Correcteur</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-allCorrections>
+      <tr>
+        <td>{{ allCorrections.module }}</td>
+        <td>{{ allCorrections.course }}</td>
+        <td style="margin-top: 0px">
+          <p-progressBar
+            *ngIf="allCorrections.average"
+            [value]="allCorrections.average"
+            [style]="{ 'font-size': '12px'}"
+          ></p-progressBar>
+          <p *ngIf="!allCorrections.average">0%</p>
+        </td>
+        <td *ngIf="allCorrections.exception == 'notException'">
+          {{ allCorrections.corrections[0].corrector }}
+        </td>
+        <td
+          *ngIf="allCorrections.exception != 'notException'"
+          style="color: red"
+        >
+          Pas de correcteur
+        </td>
+        <td class="image-text">
+          <div style="display: flex; width: 50%">
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-comment"
+              class="p-button-rounded p-button-text"
+              (click)="showDialog2(allCorrections.index)"
+              style="color: #006dbf"
+            ></button>
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-comments"
+              class="p-button-rounded p-button-text"
+              (click)="showDialog(allCorrections.index)"
+              style="color: #006dbf"
+            ></button>
+
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-github"
+              class="p-button-rounded p-button-text"
+              style="color: #006dbf"
+              (click)="showGit(allCorrections.index)"
+            ></button>
+
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-exclamation-triangle"
+              class="p-button-rounded p-button-text"
+              (click)="showReclam()"
+              style="color: #006dbf"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">Pas de corrections trouvées.</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft" let-state> </ng-template>
+    <ng-template pTemplate="summary">
+      <div
+        class="p-d-flex p-ai-center p-jc-between"
+        style="font-size: 1rem; font-weight: normal"
+      >
+        Au total, il y a
+        {{ allCorrections ? allCorrections.length : 0 }}
+        corrections.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+<p-dialog [(visible)]="display2" header="Correction" position="bottom" >
+  <ul>
+    <li
+      *ngFor="let item of selectedCorrection; index as i"
+      style="display: flex; justify-content: space-between"
+    >
+      <span> {{ item.order }}</span
+      >&nbsp;&nbsp;&nbsp;
+      <span
+        [ngClass]="{
+          'text-success': item.result === 't',
+          'text-danger': item.result === 'f'
+        }"
+      >
+        <ng-container *ngIf="item.result === 't'">
+          <em class="fas fa-check text-success"></em>
+        </ng-container>
+        <ng-container *ngIf="item.result === 'f'">
+          <em class="fas fa-times text-danger"></em>
+        </ng-container>
+      </span>
+    </li>
+  </ul>
+  <p
+    *ngIf="selectedCorrection.length == 0"
+    style="display: flex; justify-content: space-between; color: red"
+  >
+    Pas de Correction
+  </p>
+</p-dialog>
+
+<p-dialog [(visible)]="display" header="Commentaire">
+  <p style="display: flex; justify-content: space-between">{{ comments }}</p>
+  <p
+    style="display: flex; justify-content: space-between; color: red"
+    *ngIf="comments.length==0"
+  >
+    Pas de commentaire disponible!!
+  </p>
+</p-dialog>
+<p-dialog [(visible)]="displayGit" header="Git" >
+  <a href="{{ repos }}" target="_blank" style="display: flex; justify-content: space-between;color: #006dbf;text-decoration: none;">{{ repos }}</a>
+  <p
+    style="display: flex; justify-content: space-between; color: red"
+    *ngIf="!repos"
+  >
+    Vous n'avez pas soumis votre repo git!!
+  </p>
+</p-dialog>
+<p-dialog
+  [(visible)]="displayReclam"
+  [style]="{ width: '400px' }"
+  header="Envoyer votre réclamation"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <form>
+      <input pInputText type="text" style="height: 100px" />
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    
+    <button
+      pButton
+      pRipple
+      label="Annuler"
+      icon="pi pi-times"
+      class="p-button-text"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Envoyer"
+      icon="pi pi-check"
+      class="p-button-text"
+    ></button>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,114 @@
+<div class="card"  >
+  
+    <div class="title">
+        <h1 style="font-size: 1.7rem; text-align: center" s>Gestion des cursus</h1>
+    </div>
+    
+
+    <!-- Le tableau -->
+    <p-table #dt [value]="cursusList" dataKey="id" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 15, 20]" [loading]="loading" [paginator]="true" currentPageReportTemplate="{first} à {last} de {totalRecords} cursus" [globalFilterFields]="['name', 'tags']"
+        responsiveLayout="scroll">
+        <!-- La recherche -->
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between container1">
+                <span class="span1">
+          <button
+            pButton
+            pRipple
+            label="Ajouter"
+            icon="pi pi-plus"
+            class="p-button-success mr-2"
+          ></button>
+          <button
+            pButton
+            pRipple
+            label="Exporter"
+            icon="pi pi-upload"
+            class="p-button-success mr-2"
+          ></button>
+        </span>
+                <span class="span2" class="p-input-icon-left" style="float: right">
+          <i class="pi pi-search"></i>
+          <input
+            [(ngModel)]="search"
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal(search, 'contains')"
+            placeholder="Recherche"
+          />
+        </span>
+            </div>
+        </ng-template>
+
+        <!-- Les colonnes -->
+        <ng-template #myTemplate pTemplate="header">
+            <tr [style]="{ width: 'auto !important' }">
+                <th scope="col" style="text-align: center">Cursus</th>
+                <th scope="col"></th>
+                <th scope="col">Description</th>
+                <th scope="col">Tags</th>
+                <th scope="col" style="text-align: center">Visibilité</th>
+                <th scope="col" style="text-align: center">Actions</th>
+            </tr>
+        </ng-template>
+
+        <!-- Le contenu -->
+        <ng-template pTemplate="body" let-cursusList let-index="rowIndex">
+            <tr>
+                <td style="text-align: center" class="col-2">
+                    {{ cursusList.name }}
+                </td>
+                <td class="col-1">
+                    <img src="https://d2fltix0v2e0sb.cloudfront.net/dev-black.png" style="height: 2cm; width: 2cm" alt="" />
+                </td>
+                <td style="text-align: justify" class="col-4">
+                    {{ cursusList.description1 }} <span (click)="showMore(index)" style="cursor: pointer; color: rgb(63, 63, 228); font-size: 13px;" *ngIf="cursusList.description1.length<cursusList.description.length">... voir plus</span>
+                    <span (click)="showLess(index)" style="cursor: pointer; color: rgb(63, 63, 228);font-size: 13px;" *ngIf="cursusList.description1.length==cursusList.description.length && cursusList.description.length>150 "> voir moins</span>
+                </td>
+                <td class="col-3">
+                    <span *ngFor="let item of cursusList.tagsTab">
+            <p-tag
+              styleClass="p-mr-2"
+              [rounded]="true"
+              value="{{ item }}"
+            ></p-tag>
+          </span>
+                </td>
+
+                <td style="text-align: center">
+                  <em class="pi pi-eye-slash" *ngIf="cursusList.visibility == 'invisible'" style="cursor: pointer;" title="ce cursus est invisible" (click)="changeCursusVisibility(cursusList)"></em>
+                  <em class="pi pi-eye" *ngIf="cursusList.visibility == 'visible'" style="cursor: pointer;" title="ce cursus est visible" (click)="changeCursusVisibility(cursusList)"></em>
+              </td>
+                <td style="text-align: center " >
+                    <em class="pi pi-wrench mr-2" (click)="editCursus(cursusList.id)" style="cursor: pointer" title="éditer le contenu"></em>
+                    <em class="pi pi-download" (click)="makePdf(cursusList.id)" style="cursor: pointer" title="Téléchargergit le contenu"></em>
+               </td>
+              
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="5">Pas de ressource trouvée.</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between" style="font-size: 1rem; font-weight: normal">
+                Au total, il y a {{ cursusList ? cursusList.length : 0 }} cursus.
+            </div>
+
+            
+        </ng-template>
+         
+    </p-table>
+
+
+<!-- Cette partie est didiée a la temlplate pdf :  -->
+
+    
+
+
+
+
+   
+    
+ 

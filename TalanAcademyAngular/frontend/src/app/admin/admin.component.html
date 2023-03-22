@@ -1,0 +1,16 @@
+<p-menubar [model]="itemsMenu" [style]="{ margin: '-8px', border: 'unset' }">
+  <ng-template pTemplate="start">
+    <img src="assets/logoTA.png" height="40" class="mr-2" alt="talan academy" (click)="home()" style="cursor: pointer;"/>
+    
+  </ng-template>
+  
+  
+  <ng-template pTemplate="end">
+    <em class="pi pi-fw pi-user" (click)="menu.toggle($event)" iconPos="right" pRipple type="button" style="cursor: pointer; margin-right: 0.5cm;" ></em>
+    <p-tieredMenu #menu [model]="itemsProfil" [popup]="true"></p-tieredMenu>
+</ng-template>
+</p-menubar>
+<router-outlet></router-outlet>
+
+
+

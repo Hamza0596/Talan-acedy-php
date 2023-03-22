@@ -1,0 +1,100 @@
+<div class="card">  
+    <h4 style="border: blue">Gestion des modules</h4>
+     
+      <!-- Le tableau -->
+      <p-table #dt [value]="moduleList" dataKey="title"  [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[3,6,9]" [loading]="loading"  
+        currentPageReportTemplate="{first} à {last} de {totalRecords} cursus"
+        [globalFilterFields]="['name','tags']"
+        [reorderableColumns]="true"
+        responsiveLayout="scroll">
+        
+        <!-- La recherche -->
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+              <i class="pi pi-search"></i>
+              <input  [(ngModel)]="search" pInputText type="text" placeholder="Recherche" (input)="dt.filterGlobal(search,'contains')" class="p-inputtext p-component p-element ng-untouched ng-pristine ng-valid">
+              
+            </span>
+          </div>
+        </ng-template>
+        
+        <!-- Les colonnes -->
+        <ng-template #myTemplate pTemplate="header">
+          <tr >
+            <th scope="col" style="width: 1rem;" ></th>
+            <th scope="col" style="width: 4rem;"></th>
+            <th scope="col" >Module </th>
+            <th scope="col">Description</th>
+          </tr>
+        </ng-template>
+  
+        <!-- Le contenu -->
+        <ng-template  pTemplate="body" let-module let-index="rowIndex" let-expanded="expanded">
+          <tr [pReorderableRow]="index">
+            <td>
+                <button type="button" pButton pRipple [pRowToggler]="module" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" ></button>
+            </td> 
+            <td>
+              <span class="pi pi-bars" [pReorderableRowHandle]="index" title="changer l'ordre"></span>
+          </td>
+          <td>
+            {{module.title}}
+          </td>
+            <td>
+              {{module.description}}
+            </td>
+            
+            
+            
+            
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5">Pas de ressource trouvée.</td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-module>
+            <tr [style]="{ width: 'auto !important' }">
+                <td colspan="7">
+                    <div class="p-3">
+                        <p-table [value]="module.DayCourses" dataKey="name">
+                            <ng-template pTemplate="header" >
+                                <tr >
+                                    <th scope="col" style="background-color:rgb(252, 243, 232) !important;"></th>
+                                    <th scope="col" style="background-color:rgb(252, 243, 232) !important;">Leçon </th>
+                                    <th scope="col" style="background-color:rgb(252, 243, 232) !important;">Description </th>
+                                    <th scope="col" style="background-color:rgb(252, 243, 232) !important;text-align: center">Actions </th>
+                                    
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-lesson let-index="rowIndex">
+                               
+                                <tr [pReorderableRow]="index">
+                                    <td>
+                                        <span class="pi pi-bars" [pReorderableRowHandle]="index" title="changer l'ordre"></span>
+                                    </td>
+                                    <td>{{lesson.description}}</td>
+                                    <td>{{lesson.status}}</td>
+                                    <td class="col-1" style="text-align: center">
+                                      <em class="pi pi-wrench" (click)="editLesson(lesson.id)" style="cursor: pointer " title="éditer le contenu"></em>
+                                  </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="6">There are no order for this product yet.</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <div *ngFor="let item of moduleList"><span>{{item.name}}</span></div>
+  
